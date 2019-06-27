@@ -1,0 +1,18 @@
+[
+  {
+    "component": "hsb-image",
+    "prop": {
+      "url": "https: //mall.s.maizuo.com/88e4f675cb18eb8bbd973235fc3ce6b7.jpg?x-oss-process=image/resize,w_563",
+      "link": ""
+    },
+    "style": {}
+  },
+  {
+    "component": "hsb-image",
+    "prop": {
+      "url": "https://mall.s.maizuo.com/80cda6d94d47e82dcdffeb2fc5da6b2d.jpg?x-oss-process=image/resize,w_563",
+      "link": ""
+    },
+    "style": {}
+  }
+]
