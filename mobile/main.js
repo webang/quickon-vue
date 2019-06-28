@@ -3,7 +3,7 @@
 import Vue from 'vue'
 // import App from './App'
 // import router from './router'
-import axios from 'axios'
+// import axios from 'axios'
 import './styles/base.css'
 
 Vue.config.productionTip = false
@@ -11,13 +11,12 @@ Vue.config.productionTip = false
 let pageData = {
   widget: []
 }
-
-let app
+let vNodeList = []
 
 /**
  * 更新缓存数据
  */
-const updateProp = (data) => {
+const updateProp = data => {
   window.localStorage.setItem('editProps', JSON.stringify(data))
 }
 
@@ -29,11 +28,34 @@ const getProp = () => {
   return cache
 }
 
+const myRender = list => {
+  let confList = []
+  const render = function(cList, list) {
+    list.forEach((element, index) => {
+      const m = {
+        child: [],
+        props: element.prop || {},
+        style: element.style || {},
+        component: require('./hsb-components/' +
+          element.component +
+          '/index.vue').default
+      }
+      if (Array.isArray(element.child)) {
+        render(m.child, element.child)
+      }
+      cList.push(m)
+    })
+  }
+  render(confList, list)
+  vNodeList = confList
+}
+
 const getModules = function() {
   const cache = getProp()
   if (cache) {
     return new Promise((resolve, reject) => {
       pageData = JSON.parse(cache)
+      myRender(pageData.widget || [])
       resolve(pageData.widget)
     })
   }
@@ -58,7 +80,7 @@ getModules().then(modulesArray => {
         '/index.vue').default
       modules.push(module)
     })
-    app = new Vue({
+    new Vue({
       el: '#app',
       render: function(createElement) {
         let VNodes = modules.map((module, index) => {
@@ -67,6 +89,34 @@ getModules().then(modulesArray => {
             style: pageData.widget[index].style
           })
         })
+
+        const getChild = () => {
+          const parent = []
+          const render = (parent, list) => {
+            list.forEach(element => {
+              const childNode = []
+              if (element.child && element.child.length) {
+                console.log(element)
+                render(childNode, element.child)
+              }
+              parent.push(
+                createElement(
+                  element.component,
+                  {
+                    props: element.props,
+                    style: element.style
+                  },
+                  childNode
+                )
+              )
+            })
+          }
+          render(parent, vNodeList)
+          return parent
+        }
+
+        // getChild()
+
         return createElement(
           'div',
           {
@@ -75,7 +125,7 @@ getModules().then(modulesArray => {
               'data-pageData': 'render'
             }
           },
-          VNodes
+          getChild()
         )
       }
     })

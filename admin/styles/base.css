@@ -27,3 +27,8 @@ body {
   width: 1800px;
   margin: 0 auto;
 }
+
+
+body .el-input__inner {
+  border-radius: 2px;
+}

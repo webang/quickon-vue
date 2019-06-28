@@ -21,11 +21,10 @@ export default {
 <style scoped>
 .hsb-link {
   display: block;
-  text-align: center;
   height: 44px;
-  margin: 12px;
   line-height: 44px;
   background: #fefbee;
+  text-align: center;
   text-decoration: none;
 }
 </style>

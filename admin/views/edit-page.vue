@@ -2,9 +2,12 @@
   <div class="view">
     <div class="doc-row">
       <div class="main-container">
+
+        <!-- 模拟器 -->
         <div class="simulator">
           <iframe id="simulator" :src="mobileUrl" frameborder="0"></iframe>
         </div>
+
         <div class="widget-map">
           <div class="etc-item">
             <div class="etc-label">页面标题</div>
@@ -15,25 +18,39 @@
           <div class="etc-item">
             <div class="etc-label">页面组件</div>
             <div class="etc-value">
-              <div class="widget-item" v-for="(item, index) in pageData.widget" :key="index">
-                <span>{{ nameMap[item.component] }}</span>
-                <el-button class="btn" size="mini" type="primary" plain @click="movePrev(index)">上移</el-button>
-                <el-button class="btn" size="mini" type="primary" plain @click="moveNext(index)">下移</el-button>
-                <el-button
-                  class="btn"
-                  size="mini"
-                  type="primary"
-                  plain
-                  @click="removeWidget(index)"
-                >删除</el-button>
-                <el-button
-                  class="btn"
-                  size="mini"
-                  type="primary"
-                  plain
-                  @click="handleEdit(index)"
-                >编辑</el-button>
-              </div>
+              <draggable class="drag-list" v-model="pageData.widget" draggable=".widget-item">
+                <div class="widget-item" v-for="(item, index) in pageData.widget" :key="index">
+                  <span>{{ nameMap[item.component] }}</span>
+                  <!-- <el-button
+                    class="btn"
+                    size="mini"
+                    type="primary"
+                    plain
+                    @click="movePrev(index)"
+                  >上移</el-button>
+                  <el-button
+                    class="btn"
+                    size="mini"
+                    type="primary"
+                    plain
+                    @click="moveNext(index)"
+                  >下移</el-button> -->
+                  <el-button
+                    class="btn"
+                    size="mini"
+                    type="primary"
+                    plain
+                    @click="removeWidget(index)"
+                  >删除</el-button>
+                  <el-button
+                    class="btn"
+                    size="mini"
+                    type="primary"
+                    plain
+                    @click="handleEdit(index)"
+                  >编辑</el-button>
+                </div>
+              </draggable>
             </div>
           </div>
           <div class="actions-bar">
@@ -47,7 +64,7 @@
     <edit-widget
       v-if="editIndex!==-1"
       :data-form="editItem"
-      v-model="centerDialogVisible"
+      v-model="showEditWidgetDialog"
       @confirm="handleConfirmEditWidget"
     />
 
@@ -57,6 +74,7 @@
 
 <script>
 import axios from "axios";
+import draggable from "vuedraggable";
 import EditWidget from "../components/edit-widget";
 import AddWidget from "../components/add-widget";
 import propMap from "../../mobile/prop-map";
@@ -80,6 +98,7 @@ const getProp = () => {
 export default {
   name: "App",
   components: {
+    draggable,
     AddWidget,
     EditWidget
   },
@@ -92,12 +111,17 @@ export default {
       },
       editIndex: -1,
       editItem: {},
-      centerDialogVisible: false,
       childWindow: null,
       nameMap,
       materialList: Object.keys(nameMap),
-      showAddWidgetDialog: false
+      showAddWidgetDialog: false,
+      showEditWidgetDialog: false
     };
+  },
+  watch: {
+    'pageData.widget' (val) {
+      this.doUpateData();
+    }
   },
   methods: {
     // 往上移
@@ -123,7 +147,7 @@ export default {
     handleEdit(index) {
       this.editIndex = index;
       this.editItem = this.pageData.widget[index];
-      this.centerDialogVisible = true;
+      this.showEditWidgetDialog = true;
     },
 
     // 保存数据
@@ -134,7 +158,7 @@ export default {
     },
 
     handleConfirmEditWidget(data) {
-      this.centerDialogVisible = false;
+      this.showEditWidgetDialog = false;
       this.pageData.widget[this.editIndex] = data;
       this.doUpateData();
     },
@@ -221,9 +245,14 @@ export default {
   margin-top: 10px;
   margin-bottom: 10px;
   background: #fff;
+  cursor: pointer;
   border: 1px solid #67c23a;
   .btn {
     margin-left: 20px;
+  }
+  &.sortable-chosen {
+    cursor: all-scroll;
+    border-color: red;
   }
 }
 
