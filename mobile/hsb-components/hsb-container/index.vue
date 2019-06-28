@@ -11,5 +11,7 @@ export default {
 
 <style lang="postcss" scoped>
 .hsb-container {
+  padding: 12px;
+  background: red;
 }
 </style>

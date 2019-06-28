@@ -49,7 +49,8 @@ export default {
         component,
         prop: {
           ...propMap[component]
-        }
+        },
+        child: []
       };
       this.$emit("confirm", data);
       this.$emit("input", false);

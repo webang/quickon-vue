@@ -8,6 +8,7 @@
           <iframe id="simulator" :src="mobileUrl" frameborder="0"></iframe>
         </div>
 
+        <!-- 编辑区域 -->
         <div class="widget-map">
           <div class="etc-item">
             <div class="etc-label">页面标题</div>
@@ -18,39 +19,7 @@
           <div class="etc-item">
             <div class="etc-label">页面组件</div>
             <div class="etc-value">
-              <draggable class="drag-list" v-model="pageData.widget" draggable=".widget-item">
-                <div class="widget-item" v-for="(item, index) in pageData.widget" :key="index">
-                  <span>{{ nameMap[item.component] }}</span>
-                  <!-- <el-button
-                    class="btn"
-                    size="mini"
-                    type="primary"
-                    plain
-                    @click="movePrev(index)"
-                  >上移</el-button>
-                  <el-button
-                    class="btn"
-                    size="mini"
-                    type="primary"
-                    plain
-                    @click="moveNext(index)"
-                  >下移</el-button> -->
-                  <el-button
-                    class="btn"
-                    size="mini"
-                    type="primary"
-                    plain
-                    @click="removeWidget(index)"
-                  >删除</el-button>
-                  <el-button
-                    class="btn"
-                    size="mini"
-                    type="primary"
-                    plain
-                    @click="handleEdit(index)"
-                  >编辑</el-button>
-                </div>
-              </draggable>
+              <nest-widget v-model="pageData.widget" @edit-widget="handleEdit"/>
             </div>
           </div>
           <div class="actions-bar">
@@ -61,13 +30,17 @@
       </div>
     </div>
 
+    <!-- 编辑组件弹窗 -->
     <edit-widget
-      v-if="editIndex!==-1"
       :data-form="editItem"
       v-model="showEditWidgetDialog"
       @confirm="handleConfirmEditWidget"
     />
 
+    <!-- 配置数据弹窗 -->
+    <RawDisplay :code="pageData.widget" v-model="showPreCodeDialog"/>
+
+    <!-- 添加组件弹窗 -->
     <AddWidget v-model="showAddWidgetDialog" @confirm="handleConfirmAddWidget"/>
   </div>
 </template>
@@ -77,6 +50,8 @@ import axios from "axios";
 import draggable from "vuedraggable";
 import EditWidget from "../components/edit-widget";
 import AddWidget from "../components/add-widget";
+import NestWidget from "../components/nest-widget";
+import RawDisplay from "../components/raw-display";
 import propMap from "../../mobile/prop-map";
 import nameMap from "../../mobile/name-map";
 
@@ -100,7 +75,9 @@ export default {
   components: {
     draggable,
     AddWidget,
-    EditWidget
+    EditWidget,
+    NestWidget,
+    RawDisplay
   },
   data() {
     return {
@@ -115,38 +92,21 @@ export default {
       nameMap,
       materialList: Object.keys(nameMap),
       showAddWidgetDialog: false,
-      showEditWidgetDialog: false
+      showEditWidgetDialog: false,
+      showPreCodeDialog: false
     };
   },
   watch: {
-    'pageData.widget' (val) {
-      this.doUpateData();
+    "pageData": {
+      deep: true,
+      handler(val) {
+        this.doUpateData();
+      }
     }
   },
   methods: {
-    // 往上移
-    movePrev(index) {
-      const widget = this.pageData.widget.splice(index, 1)[0];
-      this.pageData.widget.splice(index - 1, 0, widget);
-      this.doUpateData();
-    },
-
-    // 往下移
-    moveNext(index) {
-      const widget = this.pageConfig.splice(index, 1)[0];
-      this.pageData.widget.splice(index + 1, 0, widget);
-      this.doUpateData();
-    },
-
-    // 删除组件
-    removeWidget(index) {
-      this.pageData.widget.splice(index, 1);
-      this.doUpateData();
-    },
-
-    handleEdit(index) {
-      this.editIndex = index;
-      this.editItem = this.pageData.widget[index];
+    handleEdit(widget, index) {
+      this.editItem = widget;
       this.showEditWidgetDialog = true;
     },
 
@@ -159,7 +119,7 @@ export default {
 
     handleConfirmEditWidget(data) {
       this.showEditWidgetDialog = false;
-      this.pageData.widget[this.editIndex] = data;
+      this.editItem = data;
       this.doUpateData();
     },
 

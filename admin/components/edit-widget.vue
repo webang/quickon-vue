@@ -68,6 +68,9 @@ export default {
     },
     centerDialogVisible(val) {
       this.$emit("input", val);
+    },
+    dataForm () {
+      this.initForm();
     }
   },
   created() {

@@ -19,5 +19,6 @@ export default {
     }, {
       id: 4
     }]
-  }
+  },
+  'hsb-container': {}
 }

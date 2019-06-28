@@ -96,7 +96,6 @@ getModules().then(modulesArray => {
             list.forEach(element => {
               const childNode = []
               if (element.child && element.child.length) {
-                console.log(element)
                 render(childNode, element.child)
               }
               parent.push(
