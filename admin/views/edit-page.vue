@@ -2,7 +2,6 @@
   <div class="view">
     <div class="doc-row">
       <div class="main-container">
-
         <!-- 模拟器 -->
         <div class="simulator">
           <iframe id="simulator" :src="mobileUrl" frameborder="0"></iframe>
@@ -25,6 +24,8 @@
           <div class="actions-bar">
             <el-button type="primary" @click="doUpateData">保存配置</el-button>
             <el-button type="primary" @click="handleClickAddWidget">添加组件</el-button>
+            <el-button type="primary" @click="showPreCodeDialog=true">查看当前配置</el-button>
+            <el-button type="primary" @click="handleReset">初始化配置</el-button>
           </div>
         </div>
       </div>
@@ -54,6 +55,8 @@ import NestWidget from "../components/nest-widget";
 import RawDisplay from "../components/raw-display";
 import propMap from "../../mobile/prop-map";
 import nameMap from "../../mobile/name-map";
+import { initPageConf } from "../config";
+import Utils from "../utils";
 
 /**
  * 更新缓存数据
@@ -93,11 +96,12 @@ export default {
       materialList: Object.keys(nameMap),
       showAddWidgetDialog: false,
       showEditWidgetDialog: false,
-      showPreCodeDialog: false
+      showPreCodeDialog: false,
+      editWidgetKey: ""
     };
   },
   watch: {
-    "pageData": {
+    pageData: {
       deep: true,
       handler(val) {
         this.doUpateData();
@@ -105,9 +109,48 @@ export default {
     }
   },
   methods: {
+    /**
+     * 重置页面数据
+     */
+    handleReset() {
+      this.pageData = Utils.getInitPageConf();
+    },
+
+    /**
+     * 点击编辑按钮
+     */
     handleEdit(widget, index) {
       this.editItem = widget;
+      this.editWidgetKey = widget.id;
       this.showEditWidgetDialog = true;
+    },
+
+    /**
+     * 确认编辑
+     */
+    handleConfirmEditWidget(data) {
+      const finder = list => {
+        list.forEach((element, index) => {
+          if (element.id === this.editItem.id) {
+            list[index] = data;
+          } else {
+            if (element.child && element.child.length) {
+              finder(element.child);
+            }
+          }
+        });
+      };
+      finder(this.pageData.widget);
+      this.doUpateData();
+    },
+
+    /**
+     * 确认添加组件
+     */
+    handleConfirmAddWidget(data) {
+      data.id = Utils.getUniqueKey();
+      this.pageData.widget.push(data);
+      this.doUpateData();
     },
 
     // 保存数据
@@ -117,20 +160,9 @@ export default {
       this.reloadMobile();
     },
 
-    handleConfirmEditWidget(data) {
-      this.showEditWidgetDialog = false;
-      this.editItem = data;
-      this.doUpateData();
-    },
-
     // 添加组件
     handleClickAddWidget() {
       this.showAddWidgetDialog = true;
-    },
-
-    handleConfirmAddWidget(data) {
-      this.pageData.widget.push(data);
-      this.doUpateData();
     },
 
     reloadMobile() {
@@ -167,7 +199,6 @@ export default {
   min-height: 800px;
   padding: 24px;
   margin-top: 20px;
-  /* background: #fff; */
 }
 
 .simulator {
@@ -189,7 +220,7 @@ export default {
 }
 
 .etc-value {
-  max-width: 300px;
+  max-width: 500px;
   margin-top: 10px;
   margin-bottom: 10px;
 }

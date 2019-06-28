@@ -1,6 +1,5 @@
 <style lang="postcss" scoped>
 .item-container {
-  max-width: 20rem;
   margin: 0;
   .btn {
     float: right;
@@ -36,19 +35,46 @@
   >
     <div class="item-group" :key="el.id" v-for="(el, index) in realValue">
       <div class="item">
-        <span>{{ el.component }}</span>
-        <el-button class="btn" size="mini" plain @click="handleRemove(el, index)">删除</el-button>
-        <el-button class="btn" size="mini" plain @click="handleEdit(el, index)">编辑</el-button>
+        <span>{{ nameMap[el.component] }}</span>
+        <span>{{ el.id }}</span>
+        <el-button
+          class="btn"
+          size="mini"
+          plain
+          @click="handleRemove(el, index)"
+          :data-index="parentIndex+'-'+index"
+        >删除</el-button>
+        <el-button
+          class="btn"
+          size="mini"
+          plain
+          @click="handleEdit(el, index)"
+          :data-index="parentIndex+'-'+index"
+        >编辑</el-button>
       </div>
-      <nested-widget @edit-widget="handleEdit" class="item-sub" :list="el.child"/>
+      <nested-widget
+        @edit-widget="handleEdit"
+        class="item-sub"
+        :list="el.child"
+        :parent-index="index"
+      />
     </div>
   </draggable>
 </template>
 
 <script>
 import draggable from "vuedraggable";
+const nameMap = {
+  'hsb-image': '图片',
+  'hsb-container': '容器',
+  'hsb-link': '链接'
+}
+
 export default {
   name: "nested-widget",
+  components: {
+    draggable
+  },
   methods: {
     emitter(value) {
       this.$emit("input", value);
@@ -60,8 +86,10 @@ export default {
       this.$emit("edit-widget", el, index);
     }
   },
-  components: {
-    draggable
+  data () {
+    return {
+      nameMap
+    }
   },
   computed: {
     dragOptions() {
@@ -79,6 +107,9 @@ export default {
     }
   },
   props: {
+    "parent-index": {
+      type: [Number, String]
+    },
     value: {
       required: false,
       type: Array,

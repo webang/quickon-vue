@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     valueString() {
-      return JSON.stringify(this.value, null, 2);
+      return JSON.stringify(this.code, null, 2);
     }
   }
 };
