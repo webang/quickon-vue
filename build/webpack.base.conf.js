@@ -24,7 +24,8 @@ module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
     admin: './admin/main.js',
-    mobile: './mobile/main.js'
+    mobile: './mobile/main.js',
+    test: './mobile/index.js'
   },
   output: {
     path: config.build.assetsRoot,

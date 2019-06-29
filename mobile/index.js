@@ -4,27 +4,13 @@ import Vue from 'vue'
 // import App from './App'
 // import router from './router'
 import parse from 'url-parse'
+import apis from './apis'
 import './styles/base.css'
 
 Vue.config.productionTip = false
 
 let pageData = {}
 let vNodeList = []
-
-/**
- * 更新缓存数据
- */
-const updateProp = data => {
-  window.localStorage.setItem('editProps', JSON.stringify(data))
-}
-
-/**
- * 获取本地缓存数据
- */
-const getProp = () => {
-  let cache = window.localStorage.getItem('editProps')
-  return cache
-}
 
 const myRender = list => {
   let confList = []
@@ -49,18 +35,28 @@ const myRender = list => {
 }
 
 const getModules = function() {
-  const cache = getProp()
+  const { pageId } = parse(window.location.href, true).query
   return new Promise((resolve, reject) => {
-    pageData = JSON.parse(cache)
-    myRender(pageData.widget || [])
-    resolve(pageData.widget)
+    apis.getPageDetails(pageId).then(res => {
+      const data = res.data.data
+      document.title = data.title
+      if (data.content) {
+        document.getElementsByName('keywords')[0].content = data.content
+      }
+      if (data.description) {
+        document.getElementsByName('description')[0].content =
+          data.description
+      }
+      data.widget = JSON.parse(data.widget)
+      pageData = data
+      myRender(pageData.widget || [])
+      resolve(pageData.widget)
+    })
   })
 }
 
-console.log(parse(window.location.href, true))
-
 /* eslint-disable no-new */
-getModules().then(() => {
+getModules().then(modulesArray => {
   require.ensure([], function(require) {
     new Vue({
       el: '#app',
@@ -103,17 +99,3 @@ getModules().then(() => {
     })
   })
 })
-
-window.addEventListener(
-  'message',
-  () => {
-    if (event.data.type === 'reload') {
-      window.location.reload()
-    }
-    if (event.data.type === 'update') {
-      updateProp(event.data.payload)
-      window.location.reload()
-    }
-  },
-  false
-)

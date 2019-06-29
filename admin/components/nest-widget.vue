@@ -63,41 +63,37 @@
 </template>
 
 <script>
-import draggable from "vuedraggable";
-const nameMap = {
-  'hsb-image': '图片',
-  'hsb-container': '容器',
-  'hsb-link': '链接'
-}
+import draggable from 'vuedraggable';
+import nameMap from '../../mobile/name-map';
 
 export default {
-  name: "nested-widget",
+  name: 'nested-widget',
   components: {
     draggable
   },
   methods: {
     emitter(value) {
-      this.$emit("input", value);
+      this.$emit('input', value);
     },
     handleRemove(el, index) {
       this.realValue.splice(index, 1);
     },
     handleEdit(el, index) {
-      this.$emit("edit-widget", el, index);
+      this.$emit('edit-widget', el, index);
     }
   },
-  data () {
+  data() {
     return {
       nameMap
-    }
+    };
   },
   computed: {
     dragOptions() {
       return {
         animation: 0,
-        group: "description",
+        group: 'description',
         disabled: false,
-        ghostClass: "ghost"
+        ghostClass: 'ghost'
       };
     },
     // this.value when input = v-model
@@ -107,7 +103,7 @@ export default {
     }
   },
   props: {
-    "parent-index": {
+    'parent-index': {
       type: [Number, String]
     },
     value: {

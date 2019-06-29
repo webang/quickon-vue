@@ -1,6 +1,7 @@
 <template>
   <el-dialog title="当前页面配置数据" :visible.sync="centerDialogVisible" width="1200px">
     <pre>{{ valueString }}</pre>
+    <!-- <el-button></el-button> -->
   </el-dialog>
 </template>
 <script>

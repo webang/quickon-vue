@@ -1,0 +1,7 @@
+{
+  "printWidth": 90,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "object-curly-spacing": "always",
+  "comma-dangle": "always"
+}

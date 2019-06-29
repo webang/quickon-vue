@@ -32,3 +32,17 @@ body {
 body .el-input__inner {
   border-radius: 2px;
 }
+
+.doc-edit-row {
+  margin: 20px 0;
+  .doc-edit-row-label {
+    margin-right: 20px;
+  }
+  .doc-edit-row-value {
+    width: 400px;
+  }
+}
+
+.doc-crumb {
+  margin: 20px;
+}

@@ -1,5 +1,12 @@
 <template>
   <div class="view">
+    <!-- 导航 -->
+    <el-breadcrumb class="doc-crumb" separator="/">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/PageList' }">页面列表</el-breadcrumb-item>
+      <el-breadcrumb-item>页面详情</el-breadcrumb-item>
+    </el-breadcrumb>
+
     <div class="doc-row">
       <div class="main-container">
         <!-- 模拟器 -->
@@ -22,7 +29,7 @@
             </div>
           </div>
           <div class="actions-bar">
-            <el-button type="primary" @click="doUpateData">保存配置</el-button>
+            <el-button type="primary" @click="saveData">保存配置</el-button>
             <el-button type="primary" @click="handleClickAddWidget">添加组件</el-button>
             <el-button type="primary" @click="showPreCodeDialog=true">查看当前配置</el-button>
             <el-button type="primary" @click="handleReset">初始化配置</el-button>
@@ -32,11 +39,13 @@
     </div>
 
     <!-- 编辑组件弹窗 -->
-    <edit-widget
-      :data-form="editItem"
-      v-model="showEditWidgetDialog"
-      @confirm="handleConfirmEditWidget"
-    />
+    <div v-if="showEditWidgetDialog">
+      <edit-widget
+        :data-form="editItem"
+        v-model="showEditWidgetDialog"
+        @confirm="handleConfirmEditWidget"
+      />
+    </div>
 
     <!-- 配置数据弹窗 -->
     <RawDisplay :code="pageData.widget" v-model="showPreCodeDialog"/>
@@ -47,34 +56,33 @@
 </template>
 
 <script>
-import axios from "axios";
-import draggable from "vuedraggable";
-import EditWidget from "../components/edit-widget";
-import AddWidget from "../components/add-widget";
-import NestWidget from "../components/nest-widget";
-import RawDisplay from "../components/raw-display";
-import propMap from "../../mobile/prop-map";
-import nameMap from "../../mobile/name-map";
-import { initPageConf } from "../config";
-import Utils from "../utils";
+import axios from 'axios';
+import draggable from 'vuedraggable';
+import EditWidget from '../components/edit-widget';
+import AddWidget from '../components/add-widget';
+import NestWidget from '../components/nest-widget';
+import RawDisplay from '../components/raw-display';
+import propMap from '../../mobile/prop-map';
+import nameMap from '../../mobile/name-map';
+import Utils from '../utils';
 
 /**
  * 更新缓存数据
  */
 const updateProp = data => {
-  window.localStorage.setItem("editProps", JSON.stringify(data));
+  window.localStorage.setItem('editProps', JSON.stringify(data));
 };
 
 /**
  * 获取本地缓存数据
  */
 const getProp = () => {
-  let cache = window.localStorage.getItem("editProps");
+  let cache = window.localStorage.getItem('editProps');
   return cache;
 };
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     draggable,
     AddWidget,
@@ -84,9 +92,9 @@ export default {
   },
   data() {
     return {
-      mobileUrl: "",
+      mobileUrl: '',
       pageData: {
-        title: "",
+        title: '',
         widget: []
       },
       editIndex: -1,
@@ -97,7 +105,7 @@ export default {
       showAddWidgetDialog: false,
       showEditWidgetDialog: false,
       showPreCodeDialog: false,
-      editWidgetKey: ""
+      editWidgetKey: ''
     };
   },
   watch: {
@@ -109,6 +117,19 @@ export default {
     }
   },
   methods: {
+    /**
+     * 将编辑的数据保存到数据库
+     */
+    saveData() {
+      const { pageId } = this.$route.query;
+      const { title, name, desc } = this.pageData;
+      const widget = JSON.stringify(this.pageData.widget);
+      const qs = `?title=${title}&widget=${widget}&name=${name}&desc=${desc}`;
+      axios.post(`http://localhost:7001/api/page/${pageId}${qs}`).then(res => {
+        console.log(res);
+      });
+    },
+
     /**
      * 重置页面数据
      */
@@ -132,6 +153,7 @@ export default {
       const finder = list => {
         list.forEach((element, index) => {
           if (element.id === this.editItem.id) {
+            console.log(element.id);
             list[index] = data;
           } else {
             if (element.child && element.child.length) {
@@ -141,6 +163,8 @@ export default {
         });
       };
       finder(this.pageData.widget);
+      const pageData = JSON.stringify(this.pageData);
+      this.pageData = JSON.parse(pageData);
       this.doUpateData();
     },
 
@@ -167,12 +191,9 @@ export default {
 
     reloadMobile() {
       const payload = {
-        type: "reload"
+        type: 'reload'
       };
-      this.childWindow.postMessage(
-        payload,
-        `${window.location.origin}/mobile.html`
-      );
+      this.childWindow.postMessage(payload, `${window.location.origin}/mobile.html`);
     },
 
     getInitData() {
@@ -183,12 +204,8 @@ export default {
   },
   mounted() {
     this.getInitData();
-    this.mobileUrl = window.location.origin + "/mobile.html";
-    // axios("http://localhost:7001/").then(res => {
-    //   res.data[0].widget = JSON.parse(res.data[0].widget);
-    //   this.pageData = res.data[0];
-    // });
-    this.childWindow = document.getElementById("simulator").contentWindow;
+    this.mobileUrl = window.location.origin + '/mobile.html';
+    this.childWindow = document.getElementById('simulator').contentWindow;
   }
 };
 </script>
@@ -198,7 +215,7 @@ export default {
   display: flex;
   min-height: 800px;
   padding: 24px;
-  margin-top: 20px;
+  padding-top: 10px;
 }
 
 .simulator {

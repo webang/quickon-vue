@@ -15,7 +15,7 @@ export const initPageConf = {
             link: 'http://www.baidu.com'
           },
           style: {}
-        }, 
+        },
         {
           component: 'hsb-link',
           prop: {
@@ -28,8 +28,8 @@ export const initPageConf = {
     }
   ],
   status: 0
-}
+};
 
 export default {
   initPageConf
-}
+};

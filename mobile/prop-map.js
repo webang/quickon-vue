@@ -1,24 +1,32 @@
+const imgs = [
+  'https://s1.huishoubao.com/static/oRG0Lf3l.png',
+  'https://s1.huishoubao.com/static/KRp17iXH.jpg'
+]
+
 export default {
   'hsb-image': {
-    url:
-      'https://mall.s.maizuo.com/88e4f675cb18eb8bbd973235fc3ce6b7.jpg?x-oss-process=image/resize,w_563',
+    url: imgs[0],
     link: ''
   },
   'hsb-link': {
-    url:
-      'https://mall.s.maizuo.com/88e4f675cb18eb8bbd973235fc3ce6b7.jpg?x-oss-process=image/resize,w_563',
+    url: 'https://mobile.huishoubao.com',
     link: ''
   },
   'hsb-coupon-list': {
-    couponList: [{
-      id: 1
-    }, {
-      id: 2
-    }, {
-      id: 3
-    }, {
-      id: 4
-    }]
+    couponList: [
+      {
+        id: 1
+      },
+      {
+        id: 2
+      },
+      {
+        id: 3
+      },
+      {
+        id: 4
+      }
+    ]
   },
   'hsb-container': {}
 }

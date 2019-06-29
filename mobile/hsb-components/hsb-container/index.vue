@@ -10,4 +10,7 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
+.hsb-container {
+  position: relative;
+}
 </style>
