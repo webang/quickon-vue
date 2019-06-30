@@ -8,6 +8,7 @@
 
 <script>
 export default {
+  name: 'hsb-banner',
   props: {
     list: {
       type: Array,

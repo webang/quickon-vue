@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "hsb-button"
+  name: 'hsb-button'
 };
 </script>
 

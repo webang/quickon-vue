@@ -24,7 +24,7 @@ body {
 }
 
 .doc-row {
-  width: 1800px;
+  /* width: 1800px; */
   margin: 0 auto;
 }
 
@@ -44,5 +44,9 @@ body .el-input__inner {
 }
 
 .doc-crumb {
-  margin: 20px;
+  margin: 20px 0;
+}
+
+.view {
+  padding: 0 30px;
 }

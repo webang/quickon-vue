@@ -1,13 +1,25 @@
 <template>
   <div class="hsb-click-area">
-<button>哈哈</button>
+    <img v-if="img" :src="img" alt>
+    <span v-if="text">{{ text }}</span>
+    <slot></slot>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'hsb-click-area'
-}
+  name: 'hsb-click-area',
+  props: {
+    img: {
+      type: String,
+      default: ''
+    },
+    text: {
+      type: String,
+      default: ''
+    }
+  }
+};
 </script>
 
 <style lang="postcss" scoped>
@@ -16,6 +28,8 @@ export default {
   position: absolute;
   left: 10px;
   top: 10px;
-  background: red;
+  width: 50px;
+  height: 50px;
+  border: 1px red solid;
 }
 </style>

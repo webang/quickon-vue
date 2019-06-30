@@ -1,76 +1,81 @@
 <template>
-  <el-dialog title="设置组件属性" :visible="dialogVisible" width="1200px">
-    <div class="body">
-      <!-- 编辑图片 -->
-      <template v-if="formValue.component==='hsb-image'">
-        <div class="row" v-for="(key, index) in Object.keys(formValue.prop)" :key="index">
-          <template v-if="key==='url'">
-            <span class="row-label">图片地址</span>
-            <el-input class="row-value" v-model="formValue.prop[key]"></el-input>
-            <div>
-              <img class="row-img" :src="formValue.prop[key]" alt>
-            </div>
-          </template>
-          <template v-if="key==='link'">
-            <span class="row-label">调转链接</span>
-            <el-input class="row-value" v-model="formValue.prop[key]"></el-input>
-          </template>
-        </div>
-      </template>
-
-      <!-- 编辑链接 -->
-      <template v-if="formValue.component==='hsb-link'">
-        <div class="row" v-for="(key, index) in Object.keys(formValue.prop)" :key="index">
-          <template v-if="key==='link'">
-            <span class="row-label">调转链接</span>
-            <el-input class="row-value" v-model="formValue.prop[key]"></el-input>
-          </template>
-        </div>
-      </template>
-
-      <!-- 公共属性 -->
-      <div class="common-style">
-        <div class="row">
-          <span class="row-label">容器宽度</span>
-          <el-input class="row-value" v-model="styleObj.width"></el-input>
-        </div>
-        <div class="row">
-          <span class="row-label">容器高度</span>
-          <el-input class="row-value" v-model="styleObj.height"></el-input>
-        </div>
-        <div class="row">
-          <span class="row-label">左侧偏移</span>
-          <el-input class="row-value" v-model="styleObj.left"></el-input>
-        </div>
-        <div class="row">
-          <span class="row-label">顶部偏移</span>
-          <el-input class="row-value" v-model="styleObj.top"></el-input>
-        </div>
-        <div class="row">
-          <span class="row-label">CSS代码</span>
-          <el-input
-            class="row-value row-textarea"
-            autosize
-            placeholder
-            type="textarea"
-            v-model="cssStr"
-          />
-        </div>
+  <div class="body" v-if="value">
+    <!-- 编辑图片 -->
+    <template v-if="formValue.component==='hsb-image'">
+      <div class="row" v-for="(key, index) in Object.keys(formValue.prop)" :key="index">
+        <template v-if="key==='url'">
+          <span class="row-label">图片地址</span>
+          <el-input class="row-value" v-model="formValue.prop[key]"></el-input>
+          <div>
+            <img class="row-img" :src="formValue.prop[key]" alt>
+          </div>
+        </template>
+        <template v-if="key==='link'">
+          <span class="row-label">跳转链接</span>
+          <el-input class="row-value" v-model="formValue.prop[key]"></el-input>
+        </template>
       </div>
-      <el-button style="margin-top: 20px" @click="handleCancle">取 消</el-button>
-      <el-button style="margin-top: 20px" @click="handleConfirm">保存</el-button>
+    </template>
+
+    <!-- 编辑链接 -->
+    <template v-if="formValue.component==='hsb-link'">
+      <div class="row" v-for="(key, index) in Object.keys(formValue.prop)" :key="index">
+        <template v-if="key==='link'">
+          <span class="row-label">调转链接</span>
+          <el-input class="row-value" v-model="formValue.prop[key]"></el-input>
+        </template>
+      </div>
+    </template>
+
+    <!-- 公共属性 -->
+    <div class="common-style">
+      <div class="row">
+        <span class="row-label">容器宽度</span>
+        <!-- <el-slider
+          class="row-value"
+          v-model="styleObj.width"
+          show-input
+          :min="0"
+          :max="750"
+        />
+        <el-button @click="styleObj.width=''" type="primary" plain size="mini">自适应</el-button>-->
+        <el-input class="row-value" v-model="styleObj.width"/>
+      </div>
+      <div class="row">
+        <span class="row-label">容器高度</span>
+        <el-input class="row-value" v-model="styleObj.height"/>
+        <!-- <el-slider class="row-value" v-model="styleObj.height" show-input :min="0" :max="750"/>
+        <el-button @click="styleObj.height=''" type="primary" plain size="mini">自适应</el-button>-->
+      </div>
+      <div class="row">
+        <span class="row-label">左侧偏移</span>
+        <el-input class="row-value" v-model="styleObj.left"/>
+      </div>
+      <div class="row">
+        <span class="row-label">顶部偏移</span>
+        <el-input class="row-value" v-model="styleObj.top"></el-input>
+      </div>
+      <div class="row">
+        <span class="row-label">CSS代码</span>
+        <el-input
+          class="row-value row-textarea"
+          autosize
+          placeholder
+          type="textarea"
+          v-model="cssStr"
+        />
+      </div>
     </div>
-  </el-dialog>
+  </div>
 </template>
 
 <script>
 import Utils from '../utils';
 const styleKeys = ['width', 'height'];
-
 export default {
   props: {
-    dataForm: Object,
-    value: Boolean
+    value: Boolean,
+    dataForm: Object
   },
   data() {
     return {
@@ -79,8 +84,8 @@ export default {
       styleObj: {
         width: '',
         height: '',
-        left: '0px',
-        top: '0px'
+        left: '0',
+        top: '0'
       },
       cssStr: ''
     };
@@ -106,6 +111,24 @@ export default {
     },
     dialogVisible(val) {
       this.$emit('input', val);
+    },
+    dataForm() {
+      this.initFormValue();
+    },
+    // formValue: {
+    //   handler() {
+    //     this.handleConfirm();
+    //   },
+    //   deep: true
+    // },
+    styleObj: {
+      handler() {
+        this.handleConfirm();
+      },
+      deep: true
+    },
+    cssStr() {
+      this.handleConfirm();
     }
   },
   created() {
@@ -113,6 +136,14 @@ export default {
     this.dialogVisible = this.value;
   },
   methods: {
+    handleSliderInput(val) {
+      if (val !== 0) {
+        this.styleObj.width = val;
+      } else {
+        this.styleObj.width = '';
+      }
+    },
+
     /**
      * 确认修改
      */
@@ -125,7 +156,7 @@ export default {
       });
       Object.assign(styleObj, this.cssObj);
       this.formValue.style = styleObj;
-      this.dialogVisible = false;
+      // this.dialogVisible = false;
       this.$emit('confirm', this.formValue);
     },
 
@@ -140,8 +171,9 @@ export default {
      * 初始化当前编辑的数据
      */
     initFormValue() {
-      let formValue = JSON.stringify(this.dataForm);
-      formValue = JSON.parse(formValue);
+      // let formValue = JSON.stringify(this.dataForm);
+      // formValue = JSON.parse(formValue);
+      let formValue = this.dataForm;
       if (!formValue.style) {
         formValue.style = {};
       }
@@ -168,12 +200,22 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
+.body {
+  flex: 1;
+  padding: 24px;
+  padding-top: 10px;
+  background: #fff;
+}
+
 .row {
+  overflow: hidden;
   margin: 10px 0;
 }
 
 .row-label {
-  margin-right: 10px;
+  float: left;
+  margin: 10px 10px;
+  margin-left: 0;
 }
 
 .row-value {
@@ -182,7 +224,8 @@ export default {
 }
 
 .row-img {
-  width: 468px;
+  max-width: 468px;
+  max-height: 300px;
   margin-top: 20px;
 }
 </style>

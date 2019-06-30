@@ -17,6 +17,9 @@
   position: relative;
   background: #fafafa;
   border: 1px solid #d9d9d9;
+  &.is-active {
+    border-color: red;
+  }
 }
 
 .item-sub {
@@ -34,30 +37,13 @@
     @input="emitter"
   >
     <div class="item-group" :key="el.id" v-for="(el, index) in realValue">
-      <div class="item">
+      <div class="item" :class="{'is-active': el.id === editKey}">
         <span>{{ nameMap[el.component] }}</span>
-        <span>{{ el.id }}</span>
-        <el-button
-          class="btn"
-          size="mini"
-          plain
-          @click="handleRemove(el, index)"
-          :data-index="parentIndex+'-'+index"
-        >删除</el-button>
-        <el-button
-          class="btn"
-          size="mini"
-          plain
-          @click="handleEdit(el, index)"
-          :data-index="parentIndex+'-'+index"
-        >编辑</el-button>
+        <span>{{ el.id.substr(0, 10) }}</span>
+        <el-button class="btn" size="mini" plain @click="handleRemove(el, index)">删除</el-button>
+        <el-button class="btn" size="mini" plain @click="handleEdit(el, index)">编辑</el-button>
       </div>
-      <nested-widget
-        @edit-widget="handleEdit"
-        class="item-sub"
-        :list="el.child"
-        :parent-index="index"
-      />
+      <nested-widget @edit-widget="handleEdit" class="item-sub" :list="el.child"/>
     </div>
   </draggable>
 </template>
@@ -79,12 +65,14 @@ export default {
       this.realValue.splice(index, 1);
     },
     handleEdit(el, index) {
+      this.editKey = el.id;
       this.$emit('edit-widget', el, index);
     }
   },
   data() {
     return {
-      nameMap
+      nameMap,
+      editKey: ''
     };
   },
   computed: {
@@ -103,9 +91,6 @@ export default {
     }
   },
   props: {
-    'parent-index': {
-      type: [Number, String]
-    },
     value: {
       required: false,
       type: Array,

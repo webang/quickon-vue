@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import HsbCoupon from "../hsb-coupon";
+import HsbCoupon from '../hsb-coupon';
 export default {
-  name: "hsb-coupon-list",
+  name: 'hsb-coupon-list',
   props: {
     couponList: {
       type: Array,

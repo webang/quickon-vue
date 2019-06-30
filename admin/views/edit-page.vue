@@ -11,40 +11,34 @@
       <div class="main-container">
         <!-- 模拟器 -->
         <div class="simulator">
-          <iframe id="simulator" :src="mobileUrl" frameborder="0"></iframe>
+          <iframe id="simulator" :src="mobileUrl" frameborder="0"/>
         </div>
 
         <!-- 编辑区域 -->
-        <div class="widget-map">
+        <div class="drag-wrapper">
           <div class="etc-item">
-            <div class="etc-label">页面标题</div>
-            <div class="etc-value">
-              <el-input v-model="pageData.title" placeholder="请输入内容"></el-input>
-            </div>
-          </div>
-          <div class="etc-item">
-            <div class="etc-label">页面组件</div>
             <div class="etc-value">
               <nest-widget v-model="pageData.widget" @edit-widget="handleEdit"/>
             </div>
           </div>
           <div class="actions-bar">
-            <el-button type="primary" @click="saveData">保存配置</el-button>
-            <el-button type="primary" @click="handleClickAddWidget">添加组件</el-button>
-            <el-button type="primary" @click="showPreCodeDialog=true">查看当前配置</el-button>
-            <el-button type="primary" @click="handleReset">初始化配置</el-button>
+            <el-button type="primary" size="small" @click="handleClickAddWidget">添加组件</el-button>
+            <el-button type="primary" size="small" @click="showPreCodeDialog=true">查看配置</el-button>
+            <div style="margin-top: 10px">
+              <el-button type="danger" size="small" @click="saveData">保存数据</el-button>
+              <el-button type="danger" size="small" @click="handleReset">重置数据</el-button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- 编辑组件弹窗 -->
-    <div v-if="showEditWidgetDialog">
-      <edit-widget
-        :data-form="editItem"
-        v-model="showEditWidgetDialog"
-        @confirm="handleConfirmEditWidget"
-      />
+        <!-- 属性值编辑区 -->
+        <edit-widget-area
+          v-if="showEditWidgetDialog"
+          :data-form="editItem"
+          v-model="showEditWidgetDialog"
+          @confirm="handleConfirmEditWidget"
+        />
+      </div>
     </div>
 
     <!-- 配置数据弹窗 -->
@@ -56,15 +50,18 @@
 </template>
 
 <script>
-import axios from 'axios';
-import draggable from 'vuedraggable';
-import EditWidget from '../components/edit-widget';
+/**
+ * @documention 编辑页面组件
+ */
+import EditWidgetDialog from '../components/edit-widget-dialog';
+import EditWidgetArea from '../components/edit-widget';
 import AddWidget from '../components/add-widget';
 import NestWidget from '../components/nest-widget';
 import RawDisplay from '../components/raw-display';
 import propMap from '../../mobile/prop-map';
 import nameMap from '../../mobile/name-map';
 import Utils from '../utils';
+import apis from '../apis';
 
 /**
  * 更新缓存数据
@@ -84,9 +81,9 @@ const getProp = () => {
 export default {
   name: 'App',
   components: {
-    draggable,
     AddWidget,
-    EditWidget,
+    EditWidgetArea,
+    EditWidgetDialog,
     NestWidget,
     RawDisplay
   },
@@ -121,13 +118,25 @@ export default {
      * 将编辑的数据保存到数据库
      */
     saveData() {
-      const { pageId } = this.$route.query;
-      const { title, name, desc } = this.pageData;
-      const widget = JSON.stringify(this.pageData.widget);
-      const qs = `?title=${title}&widget=${widget}&name=${name}&desc=${desc}`;
-      axios.post(`http://localhost:7001/api/page/${pageId}${qs}`).then(res => {
-        console.log(res);
-      });
+      apis
+        .updateWidget({
+          pageId: this.$route.query.pageId,
+          widget: this.pageData.widget
+        })
+        .then(res => {
+          res = res.data;
+          if (res.errCode === 0) {
+            this.$message({
+              type: 'success',
+              message: '保存成功，请检查线上表现'
+            });
+          } else {
+            this.$message({
+              type: 'error',
+              message: '保存失败，请联系管理员'
+            });
+          }
+        });
     },
 
     /**
@@ -153,7 +162,6 @@ export default {
       const finder = list => {
         list.forEach((element, index) => {
           if (element.id === this.editItem.id) {
-            console.log(element.id);
             list[index] = data;
           } else {
             if (element.child && element.child.length) {
@@ -213,9 +221,6 @@ export default {
 <style lang="postcss" scoped>
 .main-container {
   display: flex;
-  min-height: 800px;
-  padding: 24px;
-  padding-top: 10px;
 }
 
 .simulator {
@@ -229,15 +234,17 @@ export default {
   }
 }
 
-.widget-map {
-  flex: 1;
+.drag-wrapper {
+  /* flex: 1; */
+  min-width: 375px;
   padding: 20px;
-  margin-left: 30px;
+  padding-top: 0px;
+  margin: 0 30px;
   background: #fff;
 }
 
 .etc-value {
-  max-width: 500px;
+  max-width: 350px;
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -273,6 +280,6 @@ export default {
 }
 
 .actions-bar {
-  margin-top: 40px;
+  margin-top: 30px;
 }
 </style>

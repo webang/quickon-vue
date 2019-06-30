@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="选择您要添加的组件" :visible.sync="value">
+  <el-dialog title="选择您要添加的组件" :visible="visible">
     <div class="body">
       <ul class="material-list">
         <li
@@ -19,8 +19,11 @@
 </template>
 
 <script>
-import propMap from "../../mobile/prop-map";
-import nameMap from "../../mobile/name-map";
+/**
+ * @documention 添加组件弹窗
+ */
+import propMap from '../../mobile/prop-map';
+import nameMap from '../../mobile/name-map';
 
 export default {
   props: {
@@ -28,42 +31,61 @@ export default {
   },
   watch: {
     value(val) {
-      this.centerDialogVisible = val;
+      this.visible = val;
     },
-    centerDialogVisible(val) {
-      this.$emit("input", val);
+    visible(val) {
+      this.$emit('input', val);
+      this.resetData();
     }
   },
   data() {
     return {
       activeIndex: -1,
-      centerDialogVisible: false,
+      visible: false,
       labelList: Object.keys(nameMap),
       nameList: Object.values(nameMap)
     };
   },
   methods: {
+    /**
+     * 确认添加
+     */
     handleConfirm() {
       const component = this.labelList[this.activeIndex];
       const data = {
         component,
         prop: {
           ...propMap[component]
-        },
-        child: []
+        }
       };
-      this.$emit("confirm", data);
-      this.$emit("input", false);
-      this.resetIndex();
+
+      // 配置哪些组件可以嵌套子组件
+      if (component === 'hsb-container') {
+        data.child = [];
+      }
+
+      this.$emit('confirm', data);
+      this.$emit('input', false);
     },
+
+    /**
+     * 取消
+     */
     handleCancle() {
-      this.resetIndex();
-      this.$emit("input", false);
+      this.$emit('input', false);
     },
+    
+    /**
+     * 点击组件
+     */
     handleClick(index) {
       this.activeIndex = index;
     },
-    resetIndex() {
+
+    /**
+     * 重置组件数据
+     */
+    resetData() {
       this.activeIndex = -1;
     }
   }

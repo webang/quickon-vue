@@ -26,14 +26,29 @@ const getProp = () => {
   return cache
 }
 
+/**
+ * 整理数据
+ * @param {*} list 
+ */
 const myRender = list => {
   let confList = []
-  const render = function(cList, list) {
+  const render = function (cList, list) {
     list.forEach((element, index) => {
+
+      // 补充PX单位
+      const usePxProperty = ['width', 'height', 'top', 'left']
+      element.props = element.prop || {}
+      element.style = element.style || {}
+      Object.keys(element.style).forEach(key => {
+        if (usePxProperty.includes(key) && (element.style[key].indexOf('%') === -1)) {
+          element.style[key] = parseFloat(element.style[key]) + 'px'
+        }
+      })
+
       const m = {
         child: [],
-        props: element.prop || {},
-        style: element.style || {},
+        props: element.props,
+        style: element.style,
         component: require('./hsb-components/' +
           element.component +
           '/index.vue').default
@@ -48,7 +63,7 @@ const myRender = list => {
   vNodeList = confList
 }
 
-const getModules = function() {
+const getModules = function () {
   const cache = getProp()
   return new Promise((resolve, reject) => {
     pageData = JSON.parse(cache)
@@ -57,16 +72,15 @@ const getModules = function() {
   })
 }
 
-console.log(parse(window.location.href, true))
-
 /* eslint-disable no-new */
 getModules().then(() => {
-  require.ensure([], function(require) {
+  require.ensure([], function (require) {
     new Vue({
       el: '#app',
-      render: function(createElement) {
+      render: function (createElement) {
         const getChild = () => {
           const parent = []
+
           const render = (parent, list) => {
             list.forEach(element => {
               const childNode = []

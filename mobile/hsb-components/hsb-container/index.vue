@@ -6,7 +6,8 @@
 
 <script>
 export default {
-}
+  name: 'hsb-container'
+};
 </script>
 
 <style lang="postcss" scoped>

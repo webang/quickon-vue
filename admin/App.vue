@@ -2,7 +2,7 @@
   <div id="app">
     <div class="doc-row">
       <div class="main-header">
-        <span>页面配置系统</span>
+        <span>FrankX 页面配置系统</span>
         <div class="menu">
           <router-link class="link" to="/PageList">页面列表</router-link>
         </div>
@@ -15,33 +15,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import propMap from "../mobile/prop-map";
-import nameMap from "../mobile/name-map";
-
 export default {
-  name: "App",
-  components: {},
-  data() {
-    return {
-      tableList: []
-    };
-  },
-  methods: {
-    getInitData() {
-      let cache = getProp();
-      if (cache) cache = JSON.parse(cache);
-      this.pageData = cache;
-    },
-    doGetPageList() {
-      axios("http://localhost:7001/").then(res => {
-        this.tableList = res.data;
-      });
-    }
-  },
-  mounted() {
-    this.doGetPageList();
-  }
+  name: "App"
 };
 </script>
 
@@ -57,7 +32,6 @@ export default {
   padding: 0 30px;
   font-size: 20px;
   color: #fff;
-  margin-top: 10px;
   background: #001938;
   box-shadow: 0 2px 8px #f0f1f2;
 }
