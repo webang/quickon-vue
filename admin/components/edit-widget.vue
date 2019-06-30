@@ -1,28 +1,46 @@
 <template>
   <div class="body" v-if="value">
     <!-- 编辑图片 -->
-    <template v-if="formValue.component==='hsb-image'">
-      <div class="row" v-for="(key, index) in Object.keys(formValue.prop)" :key="index">
+    <template v-if="curForm.component==='hsb-image'">
+      <div class="row" v-for="(key, index) in Object.keys(curForm.prop)" :key="index">
         <template v-if="key==='url'">
           <span class="row-label">图片地址</span>
-          <el-input class="row-value" v-model="formValue.prop[key]"></el-input>
+          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
           <div>
-            <img class="row-img" :src="formValue.prop[key]" alt>
+            <img class="row-img" :src="curForm.prop[key]" alt>
           </div>
         </template>
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
-          <el-input class="row-value" v-model="formValue.prop[key]"></el-input>
+          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
         </template>
       </div>
     </template>
 
     <!-- 编辑链接 -->
-    <template v-if="formValue.component==='hsb-link'">
-      <div class="row" v-for="(key, index) in Object.keys(formValue.prop)" :key="index">
+    <template v-if="curForm.component==='hsb-link'">
+      <div class="row" v-for="(key, index) in Object.keys(curForm.prop)" :key="index">
         <template v-if="key==='link'">
-          <span class="row-label">调转链接</span>
-          <el-input class="row-value" v-model="formValue.prop[key]"></el-input>
+          <span class="row-label">跳转链接</span>
+          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
+        </template>
+        <template v-if="key==='text'">
+          <span class="row-label">文本内容</span>
+          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
+        </template>
+      </div>
+    </template>
+
+    <!-- 编辑链接 -->
+    <template v-if="curForm.component==='hsb-click-area'">
+      <div class="row" v-for="(key, index) in Object.keys(curForm.prop)" :key="index">
+        <template v-if="key==='link'">
+          <span class="row-label">跳转链接</span>
+          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
+        </template>
+        <template v-if="key==='url'">
+          <span class="row-label">图片地址{{ curForm.prop[key] }}</span>
+          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
         </template>
       </div>
     </template>
@@ -71,26 +89,33 @@
 
 <script>
 import Utils from '../utils';
-const styleKeys = ['width', 'height'];
+import { mapState } from 'vuex';
+
+const _styleObj = {
+  width: '',
+  height: '',
+  left: '',
+  top: ''
+};
+
 export default {
   props: {
-    value: Boolean,
-    dataForm: Object
+    value: Boolean
   },
   data() {
     return {
       dialogVisible: false,
-      formValue: {},
+      curForm: {},
       styleObj: {
-        width: '',
-        height: '',
-        left: '0',
-        top: '0'
+        ..._styleObj
       },
       cssStr: ''
     };
   },
   computed: {
+    dataForm() {
+      return this.$store.state.editForm;
+    },
     cssObj(val) {
       const styleObj = {};
       const arr = this.cssStr.replace(/\n/g, '').split(';');
@@ -106,48 +131,52 @@ export default {
     }
   },
   watch: {
-    value(val) {
-      this.dialogVisible = val;
+    dataForm(val) {
+      this.curForm = val;
+      this.initcurForm();
     },
-    dialogVisible(val) {
-      this.$emit('input', val);
-    },
-    dataForm() {
-      this.initFormValue();
-    },
-    // formValue: {
+    curForm: {
+      deep: true,
+      handler (val) {
+        this.$emit('confirm', val);
+      }
+    }
+    // value(val) {
+    //   this.dialogVisible = val;
+    // },
+    // dialogVisible(val) {
+    //   this.$emit('input', val);
+    // },
+    // styleObj: {
     //   handler() {
     //     this.handleConfirm();
     //   },
     //   deep: true
     // },
-    styleObj: {
-      handler() {
-        this.handleConfirm();
-      },
-      deep: true
-    },
-    cssStr() {
-      this.handleConfirm();
-    }
+    // cssStr() {
+    //   this.handleConfirm();
+    // }
   },
   created() {
-    this.initFormValue();
+    this.initcurForm();
+    this.$watch('curForm', {
+      deep: true,
+      handler(val) {
+        console.log(val);
+        // this.$store.commit('setCacheData', val);
+        // console.log(val);
+        // console.log(222)
+        // this.handleConfirm()
+      }
+    });
     this.dialogVisible = this.value;
   },
   methods: {
-    handleSliderInput(val) {
-      if (val !== 0) {
-        this.styleObj.width = val;
-      } else {
-        this.styleObj.width = '';
-      }
-    },
-
     /**
-     * 确认修改
+     * @description 确认修改
      */
     handleConfirm() {
+      // const obj = JSON.parse(JSON.stringify(this.curForm))
       const styleObj = {};
       Object.keys(this.styleObj).forEach(key => {
         if (Utils.isDef(this.styleObj[key])) {
@@ -155,45 +184,49 @@ export default {
         }
       });
       Object.assign(styleObj, this.cssObj);
-      this.formValue.style = styleObj;
+      this.curForm.style = styleObj;
       // this.dialogVisible = false;
-      this.$emit('confirm', this.formValue);
+      // this.$emit('confirm', this.curForm);
     },
 
     /**
-     * 关闭弹窗
+     * @description 关闭弹窗
      */
     handleCancle() {
       this.dialogVisible = false;
     },
 
     /**
-     * 初始化当前编辑的数据
+     * @description 初始化当前编辑的数据
      */
-    initFormValue() {
-      // let formValue = JSON.stringify(this.dataForm);
-      // formValue = JSON.parse(formValue);
-      let formValue = this.dataForm;
-      if (!formValue.style) {
-        formValue.style = {};
+    initcurForm() {
+      this.cssStr = '';
+      this.styleObj = {
+        ..._styleObj
+      };
+      let curForm = JSON.parse(JSON.stringify(this.dataForm));
+
+      // 校验 style 属性
+      if (!curForm.style) {
+        curForm.style = {};
       }
 
-      // 初始化被提出来的样式 width height ...
-      Object.keys(this.styleObj).forEach(key => {
-        if (Utils.isDef(formValue.style[key])) {
-          this.styleObj[key] = formValue.style[key];
-        }
-      });
+      // 初始化被提出来的属性 width height ...
+      // Object.keys(this.styleObj).forEach(key => {
+      //   if (Utils.isDef(curForm.style[key])) {
+      //     this.styleObj[key] = curForm.style[key];
+      //   }
+      // });
 
-      // 初始化 css代码
-      const cssStrList = [];
-      Object.keys(formValue.style).forEach(key => {
-        if (!Utils.isDef(this.styleObj[key])) {
-          cssStrList.push(`${key}: ${formValue.style[key]};`);
-        }
-      });
-      this.cssStr = cssStrList.join('\n');
-      this.formValue = formValue;
+      // 初始化 css 代码
+      // const cssStrList = [];
+      // Object.keys(curForm.style).forEach(key => {
+      //   if (!Utils.isDef(this.styleObj[key])) {
+      //     cssStrList.push(`${key}: ${curForm.style[key]};`);
+      //   }
+      // });
+      // this.cssStr = cssStrList.join('\n');
+      this.curForm = curForm;
     }
   }
 };

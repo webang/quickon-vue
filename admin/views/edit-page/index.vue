@@ -6,39 +6,29 @@
       <el-breadcrumb-item :to="{ path: '/PageList' }">页面列表</el-breadcrumb-item>
       <el-breadcrumb-item>页面详情</el-breadcrumb-item>
     </el-breadcrumb>
-
-    <div class="doc-row">
-      <div class="main-container">
-        <!-- 模拟器 -->
-        <div class="simulator">
-          <iframe id="simulator" :src="mobileUrl" frameborder="0"/>
-        </div>
-
-        <!-- 编辑区域 -->
-        <div class="drag-wrapper">
-          <div class="etc-item">
-            <div class="etc-value">
-              <nest-widget v-model="pageData.widget" @edit-widget="handleEdit"/>
-            </div>
-          </div>
-          <div class="actions-bar">
-            <el-button type="primary" size="small" @click="handleClickAddWidget">添加组件</el-button>
-            <el-button type="primary" size="small" @click="showPreCodeDialog=true">查看配置</el-button>
-            <div style="margin-top: 10px">
-              <el-button type="danger" size="small" @click="saveData">保存数据</el-button>
-              <el-button type="danger" size="small" @click="handleReset">重置数据</el-button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 属性值编辑区 -->
-        <edit-widget-area
-          v-if="showEditWidgetDialog"
-          :data-form="editItem"
-          v-model="showEditWidgetDialog"
-          @confirm="handleConfirmEditWidget"
-        />
+    <div class="doc-row container">
+      <!-- 模拟器 -->
+      <div class="simulator">
+        <iframe id="simulator" :src="mobileUrl" frameborder="0"/>
       </div>
+      <!-- 编辑区域 -->
+      <div class="drag-wrapper">
+        <div class="etc-item">
+          <div class="etc-value">
+            <nest-widget v-model="pageData.widget" @edit-widget="handleEdit"/>
+          </div>
+        </div>
+        <div class="actions-bar">
+          <el-button type="primary" size="small" @click="handleClickAddWidget">添加组件</el-button>
+          <el-button type="primary" size="small" @click="showPreCodeDialog=true">查看配置</el-button>
+          <div style="margin-top: 10px">
+            <el-button type="danger" size="small" @click="saveData">保存数据</el-button>
+            <!-- <el-button type="danger" size="small" @click="handleReset">重置数据</el-button> -->
+          </div>
+        </div>
+      </div>
+      <!-- 属性值编辑区 -->
+      <edit-widget-area v-model="showEditWidgetDialog" @confirm="handleConfirmEditWidget"/>
     </div>
 
     <!-- 配置数据弹窗 -->
@@ -53,65 +43,42 @@
 /**
  * @documention 编辑页面组件
  */
-import EditWidgetDialog from '../components/edit-widget-dialog';
-import EditWidgetArea from '../components/edit-widget';
-import AddWidget from '../components/add-widget';
-import NestWidget from '../components/nest-widget';
-import RawDisplay from '../components/raw-display';
-import propMap from '../../mobile/prop-map';
-import nameMap from '../../mobile/name-map';
-import Utils from '../utils';
-import apis from '../apis';
-
-/**
- * 更新缓存数据
- */
-const updateProp = data => {
-  window.localStorage.setItem('editProps', JSON.stringify(data));
-};
-
-/**
- * 获取本地缓存数据
- */
-const getProp = () => {
-  let cache = window.localStorage.getItem('editProps');
-  return cache;
-};
+import EditWidgetArea from '../../components/edit-widget';
+import AddWidget from '../../components/add-widget-dialog';
+import NestWidget from '../../components/nest-widget';
+import RawDisplay from '../../components/raw-display';
+import Utils from '../../utils';
+import apis from '../../apis';
+import { mapState } from 'vuex';
 
 export default {
-  name: 'App',
   components: {
     AddWidget,
-    EditWidgetArea,
-    EditWidgetDialog,
     NestWidget,
-    RawDisplay
+    RawDisplay,
+    EditWidgetArea
   },
   data() {
     return {
       mobileUrl: '',
       pageData: {
-        title: '',
         widget: []
       },
-      editIndex: -1,
-      editItem: {},
       childWindow: null,
-      nameMap,
-      materialList: Object.keys(nameMap),
       showAddWidgetDialog: false,
       showEditWidgetDialog: false,
-      showPreCodeDialog: false,
-      editWidgetKey: ''
+      showPreCodeDialog: false
     };
   },
-  watch: {
-    pageData: {
-      deep: true,
-      handler(val) {
-        this.doUpateData();
-      }
-    }
+  computed: {
+    ...mapState({
+      editKey: state => state.editKey
+    })
+  },
+  mounted() {
+    this.getInitData();
+    this.mobileUrl = window.location.origin + '/mobile.html';
+    this.childWindow = document.getElementById('simulator').contentWindow;
   },
   methods: {
     /**
@@ -140,18 +107,9 @@ export default {
     },
 
     /**
-     * 重置页面数据
-     */
-    handleReset() {
-      this.pageData = Utils.getInitPageConf();
-    },
-
-    /**
      * 点击编辑按钮
      */
     handleEdit(widget, index) {
-      this.editItem = widget;
-      this.editWidgetKey = widget.id;
       this.showEditWidgetDialog = true;
     },
 
@@ -161,7 +119,7 @@ export default {
     handleConfirmEditWidget(data) {
       const finder = list => {
         list.forEach((element, index) => {
-          if (element.id === this.editItem.id) {
+          if (element.id === this.editKey) {
             list[index] = data;
           } else {
             if (element.child && element.child.length) {
@@ -171,9 +129,7 @@ export default {
         });
       };
       finder(this.pageData.widget);
-      const pageData = JSON.stringify(this.pageData);
-      this.pageData = JSON.parse(pageData);
-      this.doUpateData();
+      this.updateCacheData();
     },
 
     /**
@@ -182,14 +138,18 @@ export default {
     handleConfirmAddWidget(data) {
       data.id = Utils.getUniqueKey();
       this.pageData.widget.push(data);
-      this.doUpateData();
+      this.updateCacheData();
     },
 
     // 保存数据
-    doUpateData() {
-      const widget = JSON.stringify(this.pageData.widget);
-      updateProp(this.pageData);
-      this.reloadMobile();
+    updateCacheData() {
+      this.$store.commit('setCacheData', this.pageData);
+      this.childWindow.postMessage(
+        {
+          type: 'reload'
+        },
+        `${window.location.origin}/mobile.html`
+      );
     },
 
     // 添加组件
@@ -197,29 +157,18 @@ export default {
       this.showAddWidgetDialog = true;
     },
 
-    reloadMobile() {
-      const payload = {
-        type: 'reload'
-      };
-      this.childWindow.postMessage(payload, `${window.location.origin}/mobile.html`);
-    },
-
+    /**
+     * 初始化数据
+     */
     getInitData() {
-      let cache = getProp();
-      if (cache) cache = JSON.parse(cache);
-      this.pageData = cache;
+      this.pageData = this.$store.state.cacheData;
     }
-  },
-  mounted() {
-    this.getInitData();
-    this.mobileUrl = window.location.origin + '/mobile.html';
-    this.childWindow = document.getElementById('simulator').contentWindow;
   }
 };
 </script>
 
 <style lang="postcss" scoped>
-.main-container {
+.container {
   display: flex;
 }
 
@@ -235,7 +184,6 @@ export default {
 }
 
 .drag-wrapper {
-  /* flex: 1; */
   min-width: 375px;
   padding: 20px;
   padding-top: 0px;
@@ -269,9 +217,6 @@ export default {
     cursor: all-scroll;
     border-color: red;
   }
-}
-
-.edit-wrapper {
 }
 
 .edit-input {

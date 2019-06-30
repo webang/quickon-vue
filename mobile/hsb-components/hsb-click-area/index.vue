@@ -1,8 +1,7 @@
 <template>
   <div class="hsb-click-area">
-    <img v-if="img" :src="img" alt>
+    <img v-if="url" :src="url" alt>
     <span v-if="text">{{ text }}</span>
-    <slot></slot>
   </div>
 </template>
 
@@ -10,11 +9,15 @@
 export default {
   name: 'hsb-click-area',
   props: {
-    img: {
+    url: {
       type: String,
       default: ''
     },
     text: {
+      type: String,
+      default: ''
+    },
+    link: {
       type: String,
       default: ''
     }
@@ -26,8 +29,8 @@ export default {
 .hsb-click-area {
   z-index: 5;
   position: absolute;
-  left: 10px;
-  top: 10px;
+  left: 0;
+  top: 0;
   width: 50px;
   height: 50px;
   border: 1px red solid;

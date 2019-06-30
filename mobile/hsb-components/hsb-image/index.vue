@@ -19,10 +19,14 @@ export default {
 
 <style lang="postcss" scoped>
 .hsb-image {
-  float: left;
-  display: block;
+  display: inline-block;
   width: 100%;
-  border: 0;
+}
+
+a {
+  display: block;
+  height: 100%;
+  width: 100%;
 }
 
 img {

@@ -41,7 +41,7 @@
         <span>{{ nameMap[el.component] }}</span>
         <span>{{ el.id.substr(0, 10) }}</span>
         <el-button class="btn" size="mini" plain @click="handleRemove(el, index)">删除</el-button>
-        <el-button class="btn" size="mini" plain @click="handleEdit(el, index)">编辑</el-button>
+        <el-button class="btn" size="mini" plain @click.native="handleEdit(el, index)">编辑</el-button>
       </div>
       <nested-widget @edit-widget="handleEdit" class="item-sub" :list="el.child"/>
     </div>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import draggable from 'vuedraggable';
 import nameMap from '../../mobile/name-map';
 
@@ -57,25 +58,27 @@ export default {
   components: {
     draggable
   },
-  methods: {
-    emitter(value) {
-      this.$emit('input', value);
+  props: {
+    value: {
+      required: false,
+      type: Array,
+      default: null
     },
-    handleRemove(el, index) {
-      this.realValue.splice(index, 1);
-    },
-    handleEdit(el, index) {
-      this.editKey = el.id;
-      this.$emit('edit-widget', el, index);
+    list: {
+      required: false,
+      type: Array,
+      default: null
     }
   },
   data() {
     return {
-      nameMap,
-      editKey: ''
+      nameMap
     };
   },
   computed: {
+    ...mapState({
+      editKey: state => state.editKey
+    }),
     dragOptions() {
       return {
         animation: 0,
@@ -90,16 +93,19 @@ export default {
       return this.value ? this.value : this.list;
     }
   },
-  props: {
-    value: {
-      required: false,
-      type: Array,
-      default: null
+  methods: {
+    emitter(value) {
+      this.$emit('input', value);
     },
-    list: {
-      required: false,
-      type: Array,
-      default: null
+    handleRemove(el, index) {
+      this.realValue.splice(index, 1);
+    },
+    handleEdit(el, index) {
+      this.$store.dispatch('handleEdit', {
+        editKey: el.id,
+        editForm: el
+      })
+      this.$emit('edit-widget', el, index);
     }
   }
 };

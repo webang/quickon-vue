@@ -35,8 +35,8 @@
 /**
  * @documention 页面列表
  */
-import apis from '../apis';
-import AddPageDialog from '../components/add-page-dialog';
+import apis from '../../apis';
+import AddPageDialog from '../../components/add-page-dialog';
 
 export default {
   components: {
@@ -88,7 +88,7 @@ export default {
      */
     handleEdit(data) {
       data.widget = JSON.parse(data.widget);
-      window.localStorage.setItem('editProps', JSON.stringify(data));
+      this.$store.commit('setCacheData', data);
       this.$router.push(`/EditPage?pageId=${data.id}`);
     }
   },

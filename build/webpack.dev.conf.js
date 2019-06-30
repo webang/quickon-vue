@@ -64,12 +64,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       template: 'mobile/index.html',
       inject: true
     }),
-    new HtmlWebpackPlugin({
-      chunks: ['manifest', 'vendor', 'test'],
-      filename: 'test.html',
-      template: 'mobile/index.html',
-      inject: true
-    }),
+    // new HtmlWebpackPlugin({
+    //   chunks: ['manifest', 'vendor', 'test'],
+    //   filename: 'test.html',
+    //   template: 'mobile/index.html',
+    //   inject: true
+    // }),
     new HtmlWebpackPlugin({
       chunks: ['manifest', 'vendor', 'admin'],
       filename: 'admin.html',

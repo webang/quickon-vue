@@ -2,7 +2,7 @@
   <div id="app">
     <div class="doc-row">
       <div class="main-header">
-        <span>FrankX 页面配置系统</span>
+        <span>F6-X 页面配置系统</span>
         <div class="menu">
           <router-link class="link" to="/PageList">页面列表</router-link>
         </div>
