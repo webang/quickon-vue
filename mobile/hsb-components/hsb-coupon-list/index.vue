@@ -1,6 +1,11 @@
 <template>
   <div class="hsb-coupon-list">
-    <HsbCoupon v-for="(item, index) in couponList" :key="index"/>
+    <HsbCoupon
+      v-for="(item, index) in couponList"
+      :key="index"
+      :id="item.id"
+      :url="item.url"
+    />
   </div>
 </template>
 

@@ -6,4 +6,4 @@ export default {
   'hsb-coupon-list': '券组',
   'hsb-container': '容器',
   'hsb-click-area': '热区'
-}
+};

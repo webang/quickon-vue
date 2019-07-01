@@ -25,7 +25,6 @@ module.exports = {
   entry: {
     admin: './admin/main.js',
     mobile: './mobile/main.js'
-    // test: './mobile/index.js'
   },
   output: {
     path: config.build.assetsRoot,
@@ -98,4 +97,4 @@ module.exports = {
     tls: 'empty',
     child_process: 'empty'
   }
-}
+};

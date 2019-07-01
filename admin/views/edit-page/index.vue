@@ -15,7 +15,7 @@
       <div class="drag-wrapper">
         <div class="etc-item">
           <div class="etc-value">
-            <nest-widget v-model="pageData.widget" @edit-widget="handleEdit"/>
+            <nest-widget v-model="pageData.widget"/>
           </div>
         </div>
         <div class="actions-bar">
@@ -23,12 +23,13 @@
           <el-button type="primary" size="small" @click="showPreCodeDialog=true">查看配置</el-button>
           <div style="margin-top: 10px">
             <el-button type="danger" size="small" @click="saveData">保存数据</el-button>
-            <!-- <el-button type="danger" size="small" @click="handleReset">重置数据</el-button> -->
           </div>
         </div>
       </div>
       <!-- 属性值编辑区 -->
-      <edit-widget-area v-model="showEditWidgetDialog" @confirm="handleConfirmEditWidget"/>
+      <div class="edit-widget">
+        <edit-widget-area v-model="showEditWidgetDialog"/>
+      </div>
     </div>
 
     <!-- 配置数据弹窗 -->
@@ -72,8 +73,18 @@ export default {
   },
   computed: {
     ...mapState({
-      editKey: state => state.editKey
+      editKey: state => state.editKey,
+      editForm: state => state.editForm
     })
+  },
+  watch: {
+    // 当
+    'pageData.widget': {
+      deep: true,
+      handler() {
+        this.updateCacheData();
+      }
+    }
   },
   mounted() {
     this.getInitData();
@@ -104,32 +115,6 @@ export default {
             });
           }
         });
-    },
-
-    /**
-     * 点击编辑按钮
-     */
-    handleEdit(widget, index) {
-      this.showEditWidgetDialog = true;
-    },
-
-    /**
-     * 确认编辑
-     */
-    handleConfirmEditWidget(data) {
-      const finder = list => {
-        list.forEach((element, index) => {
-          if (element.id === this.editKey) {
-            list[index] = data;
-          } else {
-            if (element.child && element.child.length) {
-              finder(element.child);
-            }
-          }
-        });
-      };
-      finder(this.pageData.widget);
-      this.updateCacheData();
     },
 
     /**
@@ -169,10 +154,12 @@ export default {
 
 <style lang="postcss" scoped>
 .container {
+  overflow: hidden;
   display: flex;
 }
 
 .simulator {
+  float: left;
   width: 375px;
   height: 667px;
   background: #fff;
@@ -184,6 +171,7 @@ export default {
 }
 
 .drag-wrapper {
+  float: left;
   min-width: 375px;
   padding: 20px;
   padding-top: 0px;
@@ -226,5 +214,12 @@ export default {
 
 .actions-bar {
   margin-top: 30px;
+}
+
+.edit-widget {
+  overflow: scroll;
+  float: left;
+  width: 1000px;
+  height: 800px;
 }
 </style>

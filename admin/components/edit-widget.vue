@@ -1,46 +1,93 @@
 <template>
-  <div class="body" v-if="value">
+  <div class="body" v-if="showEditWidget">
     <!-- 编辑图片 -->
     <template v-if="curForm.component==='hsb-image'">
-      <div class="row" v-for="(key, index) in Object.keys(curForm.prop)" :key="index">
+      <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='url'">
           <span class="row-label">图片地址</span>
-          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
+          <el-input class="row-value" v-model="curForm.props[key]"></el-input>
           <div>
-            <img class="row-img" :src="curForm.prop[key]" alt>
+            <img class="row-img" :src="curForm.props[key]" alt>
           </div>
         </template>
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
-          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
+          <el-input class="row-value" v-model="curForm.props[key]"></el-input>
         </template>
       </div>
     </template>
 
     <!-- 编辑链接 -->
     <template v-if="curForm.component==='hsb-link'">
-      <div class="row" v-for="(key, index) in Object.keys(curForm.prop)" :key="index">
+      <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
-          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
+          <el-input class="row-value" v-model="curForm.props[key]"></el-input>
         </template>
         <template v-if="key==='text'">
           <span class="row-label">文本内容</span>
-          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
+          <el-input class="row-value" v-model="curForm.props[key]"></el-input>
         </template>
       </div>
     </template>
 
-    <!-- 编辑链接 -->
+    <!-- 编辑热区 -->
     <template v-if="curForm.component==='hsb-click-area'">
-      <div class="row" v-for="(key, index) in Object.keys(curForm.prop)" :key="index">
+      <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
-          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
+          <el-input class="row-value" v-model="curForm.props[key]"/>
         </template>
         <template v-if="key==='url'">
-          <span class="row-label">图片地址{{ curForm.prop[key] }}</span>
-          <el-input class="row-value" v-model="curForm.prop[key]"></el-input>
+          <span class="row-label">图片地址</span>
+          <el-input class="row-value" v-model="curForm.props[key]"/>
+          <div>
+            <img class="row-img" :src="curForm.props[key]" alt>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <!-- 编辑优惠券 -->
+    <template v-if="curForm.component==='hsb-coupon'">
+      <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
+        <template v-if="key==='id'">
+          <span class="row-label">券ID</span>
+          <el-input class="row-value" v-model="curForm.props[key]"></el-input>
+        </template>
+        <template v-if="key==='url'">
+          <span class="row-label">图片地址</span>
+          <el-input class="row-value" v-model="curForm.props[key]"></el-input>
+          <div>
+            <img class="row-img" :src="curForm.props[key]" alt>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <!-- 优惠券组 -->
+    <template v-if="curForm.component==='hsb-coupon-list'">
+      <div
+        class="row coupon-list-prop"
+        v-for="(key, index) in Object.keys(curForm.props)"
+        :key="index"
+      >
+        <template v-if="key==='couponList'">
+          <div class="coupon-item" v-for="(item, index) in curForm.props.couponList" :key="index">
+            <div>
+              <span class="row-label">券ID</span>
+              <el-input class="row-value" v-model="item.id"></el-input>
+              <el-button type="primary" plain @click="handleAddCoupon(index)">+</el-button>
+              <el-button type="primary" plain @click="handleRemoveCoupon(index)">-</el-button>
+            </div>
+            <div style="margin-top: 20px">
+              <span class="row-label">图片</span>
+              <el-input class="row-value" v-model="item.url"></el-input>
+              <div style="margin-bottom: 20px">
+                <img class="row-img" :src="item.url" alt>
+              </div>
+            </div>
+          </div>
         </template>
       </div>
     </template>
@@ -80,7 +127,7 @@
           autosize
           placeholder
           type="textarea"
-          v-model="cssStr"
+          v-model="styleStr"
         />
       </div>
     </div>
@@ -90,13 +137,7 @@
 <script>
 import Utils from '../utils';
 import { mapState } from 'vuex';
-
-const _styleObj = {
-  width: '',
-  height: '',
-  left: '',
-  top: ''
-};
+import propsMap from '../../mobile/prop-map';
 
 export default {
   props: {
@@ -105,88 +146,84 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      curForm: {},
+      styleStr: '',
       styleObj: {
-        ..._styleObj
+        width: '',
+        height: '',
+        left: '',
+        top: ''
       },
-      cssStr: ''
+      curForm: {}
     };
   },
   computed: {
-    dataForm() {
-      return this.$store.state.editForm;
+    ...mapState({
+      editKey: state => state.editKey,
+      editForm: state => state.editForm,
+      showEditWidget: state => state.showEditWidget
+      // styleObj: state => state.styleObj
+      // styleStr: state => state.styleStr
+    })
+    // cssObj(val) {
+
+    // }
+  },
+  watch: {
+    editKey(val) {
+      this.initEditData();
     },
-    cssObj(val) {
-      const styleObj = {};
-      const arr = this.cssStr.replace(/\n/g, '').split(';');
+    styleObj: {
+      deep: true,
+      handler(val) {
+        Object.assign(this.curForm.style, {
+          ...val
+        });
+        this.$store.dispatch('handleEditForm', this.curForm);
+      }
+    }
+  },
+  created() {
+    this.initEditData();
+    this.$watch('curForm', {
+      deep: true,
+      handler(val) {
+        this.$store.dispatch('handleEditForm', val);
+      }
+    });
+    this.$watch('styleStr', val => {
+      const obj = {};
+      const arr = val.replace(/\n/g, '').split(';');
       arr.forEach(element => {
         if (element.includes(':')) {
           const list = element.split(':');
           const key = Utils.trim(list[0]);
           const value = Utils.trim(list[1]);
-          styleObj[key] = value;
+          obj[key] = value;
         }
       });
-      return styleObj;
-    }
-  },
-  watch: {
-    dataForm(val) {
-      this.curForm = val;
-      this.initcurForm();
-    },
-    curForm: {
-      deep: true,
-      handler (val) {
-        this.$emit('confirm', val);
-      }
-    }
-    // value(val) {
-    //   this.dialogVisible = val;
-    // },
-    // dialogVisible(val) {
-    //   this.$emit('input', val);
-    // },
-    // styleObj: {
-    //   handler() {
-    //     this.handleConfirm();
-    //   },
-    //   deep: true
-    // },
-    // cssStr() {
-    //   this.handleConfirm();
-    // }
-  },
-  created() {
-    this.initcurForm();
-    this.$watch('curForm', {
-      deep: true,
-      handler(val) {
-        console.log(val);
-        // this.$store.commit('setCacheData', val);
-        // console.log(val);
-        // console.log(222)
-        // this.handleConfirm()
-      }
+      Object.assign(this.curForm.style, {
+        ...obj
+      });
+      Object.keys(obj).forEach(key => {
+        if (Utils.isDef(this.styleObj[key])) {
+          this.styleObj[key] = obj[key];
+        }
+      });
+      this.$store.dispatch('handleEditForm', this.curForm);
     });
     this.dialogVisible = this.value;
   },
   methods: {
-    /**
-     * @description 确认修改
-     */
-    handleConfirm() {
-      // const obj = JSON.parse(JSON.stringify(this.curForm))
-      const styleObj = {};
-      Object.keys(this.styleObj).forEach(key => {
-        if (Utils.isDef(this.styleObj[key])) {
-          styleObj[key] = this.styleObj[key];
-        }
+    // 添加优惠券
+    handleAddCoupon(index) {
+      this.curForm.props.couponList.splice(index + 1, 0, {
+        ...propsMap['hsb-coupon']
       });
-      Object.assign(styleObj, this.cssObj);
-      this.curForm.style = styleObj;
-      // this.dialogVisible = false;
-      // this.$emit('confirm', this.curForm);
+    },
+
+    // 删除优惠券
+    handleRemoveCoupon(index) {
+      this.curForm.props.couponList.splice(index, 1);
     },
 
     /**
@@ -199,33 +236,43 @@ export default {
     /**
      * @description 初始化当前编辑的数据
      */
-    initcurForm() {
-      this.cssStr = '';
+    initEditData() {
+      console.log('initEditData');
+      const curForm = this.editForm;
+
+      this.styleStr = '';
       this.styleObj = {
-        ..._styleObj
+        width: '',
+        height: '',
+        left: '',
+        top: ''
       };
-      let curForm = JSON.parse(JSON.stringify(this.dataForm));
 
       // 校验 style 属性
       if (!curForm.style) {
         curForm.style = {};
       }
 
+      // 校验 props 属性
+      if (!curForm.props) {
+        curForm.props = curForm.prop || {};
+      }
+
       // 初始化被提出来的属性 width height ...
-      // Object.keys(this.styleObj).forEach(key => {
-      //   if (Utils.isDef(curForm.style[key])) {
-      //     this.styleObj[key] = curForm.style[key];
-      //   }
-      // });
+      Object.keys(this.styleObj).forEach(key => {
+        if (Utils.isDef(curForm.style[key])) {
+          this.styleObj[key] = curForm.style[key];
+        }
+      });
 
       // 初始化 css 代码
-      // const cssStrList = [];
-      // Object.keys(curForm.style).forEach(key => {
-      //   if (!Utils.isDef(this.styleObj[key])) {
-      //     cssStrList.push(`${key}: ${curForm.style[key]};`);
-      //   }
-      // });
-      // this.cssStr = cssStrList.join('\n');
+      const cssStrList = [];
+      Object.keys(curForm.style).forEach(key => {
+        if (!Utils.isDef(this.styleObj[key])) {
+          cssStrList.push(`${key}: ${curForm.style[key]};`);
+        }
+      });
+      this.cssStr = cssStrList.join('\n');
       this.curForm = curForm;
     }
   }
@@ -234,7 +281,6 @@ export default {
 
 <style lang="postcss" scoped>
 .body {
-  flex: 1;
   padding: 24px;
   padding-top: 10px;
   background: #fff;
@@ -257,8 +303,11 @@ export default {
 }
 
 .row-img {
-  max-width: 468px;
-  max-height: 300px;
+  max-height: 120px;
   margin-top: 20px;
+}
+
+/* 优惠券列表 */
+.coupon-list-prop {
 }
 </style>

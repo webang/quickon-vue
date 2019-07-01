@@ -40,9 +40,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay
-      ? { warnings: false, errors: true }
-      : false,
+    overlay: config.dev.errorOverlay ? { warnings: false, errors: true } : false,
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
@@ -64,12 +62,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       template: 'mobile/index.html',
       inject: true
     }),
-    // new HtmlWebpackPlugin({
-    //   chunks: ['manifest', 'vendor', 'test'],
-    //   filename: 'test.html',
-    //   template: 'mobile/index.html',
-    //   inject: true
-    // }),
     new HtmlWebpackPlugin({
       chunks: ['manifest', 'vendor', 'admin'],
       filename: 'admin.html',
@@ -85,7 +77,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       }
     ])
   ]
-})
+});
 
 module.exports = new Promise((resolve, reject) => {
   portfinder.basePort = process.env.PORT || config.dev.port

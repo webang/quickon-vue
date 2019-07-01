@@ -33,7 +33,7 @@
     tag="div"
     class="item-container"
     :list="list"
-    :value="value"
+    v-model="value"
     @input="emitter"
   >
     <div class="item-group" :key="el.id" v-for="(el, index) in realValue">
@@ -102,10 +102,9 @@ export default {
     },
     handleEdit(el, index) {
       this.$store.dispatch('handleEdit', {
-        editKey: el.id,
-        editForm: el
+        editForm: el,
+        editKey: el.id
       })
-      this.$emit('edit-widget', el, index);
     }
   }
 };
