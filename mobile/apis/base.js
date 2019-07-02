@@ -37,5 +37,17 @@ export default {
    */
   addCoupon({ id, isCouponParcel = 0, couponInfoShow = 1 }) {
     return baseHttp.post(`/api/coupon/addByUser`, { id, isCouponParcel, couponInfoShow });
+  },
+
+  // 获取腾讯云上传签名
+  createUploadSign({
+    fileName,
+    path = '/iosjc/dev/',
+    customPath = '/kl/',
+    uploadWay = 'tencentUpload'
+  }) {
+    return baseHttp.post(
+      `/api/upload/getSign?path=${path}&customPath=${customPath}&uploadWay=${uploadWay}&fileName=${fileName}`
+    );
   }
 };

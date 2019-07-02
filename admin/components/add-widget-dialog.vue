@@ -54,16 +54,18 @@ export default {
       const component = this.labelList[this.activeIndex];
       const data = {
         component,
-        prop: {
+        props: {
           ...propMap[component]
         }
       };
-
       // 配置哪些组件可以嵌套子组件
-      if (component === 'hsb-container') {
+      const hasChildList = [
+        'hsb-container',
+        'hsb-column',
+      ]
+      if (hasChildList.includes(component)) {
         data.child = [];
       }
-
       this.$emit('confirm', data);
       this.$emit('input', false);
     },

@@ -26,6 +26,9 @@ window.addEventListener(
     if (event.data.type === 'reload') {
       store.commit('setPageData', storage.get('editProps'));
     }
+    if (event.data.type === 'setEditKey') {
+      store.commit('setEditKey', storage.get('editKey'));
+    }
   },
   false
 );

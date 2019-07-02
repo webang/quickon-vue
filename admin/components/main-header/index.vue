@@ -1,21 +1,15 @@
 <template>
-  <div id="app">
-    <!-- <div class="doc-row">
-      <div class="header">
-        <span>FK页面装修系统</span>
-        <div class="menu">
-          <router-link class="link" to="/PageList">页面列表</router-link>
-        </div>
-      </div>
-    </div>-->
-    <router-view></router-view>
+  <div class="header">
+    <span>FK页面装修系统</span>
+    <div class="menu">
+      <router-link class="link" to="/PageList">页面列表</router-link>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
-};
+}
 </script>
 
 <style lang="postcss" scoped>

@@ -4,11 +4,11 @@
     <template v-if="curForm.component==='hsb-image'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='url'">
-          <span class="row-label">图片地址</span>
-          <el-input class="row-value" v-model="curForm.props[key]"></el-input>
-          <div>
-            <img class="row-img" :src="curForm.props[key]" alt>
+          <div style="overflow: hidden">
+            <span class="row-label">图片地址</span>
+            <el-input class="row-value" v-model="curForm.props[key]"></el-input>
           </div>
+          <uploader v-model="curForm.props[key]" />
         </template>
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
@@ -36,13 +36,13 @@
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
-          <el-input class="row-value" v-model="curForm.props[key]"/>
+          <el-input class="row-value" v-model="curForm.props[key]" />
         </template>
         <template v-if="key==='url'">
           <span class="row-label">图片地址</span>
-          <el-input class="row-value" v-model="curForm.props[key]"/>
+          <el-input class="row-value" v-model="curForm.props[key]" />
           <div>
-            <img class="row-img" :src="curForm.props[key]" alt>
+            <img class="row-img" :src="curForm.props[key]" alt />
           </div>
         </template>
       </div>
@@ -59,7 +59,7 @@
           <span class="row-label">图片地址</span>
           <el-input class="row-value" v-model="curForm.props[key]"></el-input>
           <div>
-            <img class="row-img" :src="curForm.props[key]" alt>
+            <img class="row-img" :src="curForm.props[key]" alt />
           </div>
         </template>
       </div>
@@ -84,10 +84,20 @@
               <span class="row-label">图片</span>
               <el-input class="row-value" v-model="item.url"></el-input>
               <div style="margin-bottom: 20px">
-                <img class="row-img" :src="item.url" alt>
+                <img class="row-img" :src="item.url" alt />
               </div>
             </div>
           </div>
+        </template>
+      </div>
+    </template>
+
+    <!-- 多列 -->
+    <template v-if="curForm.component==='hsb-column'">
+      <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
+        <template v-if="key==='column'">
+          <span class="row-label">设置列数</span>
+          <el-slider class="row-value" v-model="curForm.props[key]" show-input :min="1" :max="4" />
         </template>
       </div>
     </template>
@@ -96,25 +106,19 @@
     <div class="common-style">
       <div class="row">
         <span class="row-label">容器宽度</span>
-        <!-- <el-slider
-          class="row-value"
-          v-model="styleObj.width"
-          show-input
-          :min="0"
-          :max="750"
-        />
+        <!-- 
         <el-button @click="styleObj.width=''" type="primary" plain size="mini">自适应</el-button>-->
-        <el-input class="row-value" v-model="styleObj.width"/>
+        <el-input class="row-value" v-model="styleObj.width" />
       </div>
       <div class="row">
         <span class="row-label">容器高度</span>
-        <el-input class="row-value" v-model="styleObj.height"/>
+        <el-input class="row-value" v-model="styleObj.height" />
         <!-- <el-slider class="row-value" v-model="styleObj.height" show-input :min="0" :max="750"/>
         <el-button @click="styleObj.height=''" type="primary" plain size="mini">自适应</el-button>-->
       </div>
       <div class="row">
         <span class="row-label">左侧偏移</span>
-        <el-input class="row-value" v-model="styleObj.left"/>
+        <el-input class="row-value" v-model="styleObj.left" />
       </div>
       <div class="row">
         <span class="row-label">顶部偏移</span>
@@ -131,15 +135,20 @@
         />
       </div>
     </div>
+    <el-button class="close-edit-btn" type="primary" plain @click="handleClose">关闭编辑</el-button>
   </div>
 </template>
 
 <script>
 import Utils from '../utils';
 import { mapState } from 'vuex';
+import Uploader from '../components/uploader';
 import propsMap from '../../mobile/prop-map';
 
 export default {
+  components: {
+    Uploader
+  },
   props: {
     value: Boolean
   },
@@ -161,12 +170,7 @@ export default {
       editKey: state => state.editKey,
       editForm: state => state.editForm,
       showEditWidget: state => state.showEditWidget
-      // styleObj: state => state.styleObj
-      // styleStr: state => state.styleStr
     })
-    // cssObj(val) {
-
-    // }
   },
   watch: {
     editKey(val) {
@@ -226,20 +230,15 @@ export default {
       this.curForm.props.couponList.splice(index, 1);
     },
 
-    /**
-     * @description 关闭弹窗
-     */
-    handleCancle() {
-      this.dialogVisible = false;
+    // 关闭弹窗
+    handleClose() {
+      this.$store.commit('setEditKey', '');
+      this.$store.commit('setShowEditWidget', false);
     },
 
-    /**
-     * @description 初始化当前编辑的数据
-     */
+    // 初始化当前编辑的数据
     initEditData() {
-      console.log('initEditData');
       const curForm = this.editForm;
-
       this.styleStr = '';
       this.styleObj = {
         width: '',
@@ -267,12 +266,13 @@ export default {
 
       // 初始化 css 代码
       const cssStrList = [];
+      console.log(curForm.style);
       Object.keys(curForm.style).forEach(key => {
         if (!Utils.isDef(this.styleObj[key])) {
           cssStrList.push(`${key}: ${curForm.style[key]};`);
         }
       });
-      this.cssStr = cssStrList.join('\n');
+      this.styleStr = cssStrList.join('\n');
       this.curForm = curForm;
     }
   }
@@ -298,12 +298,17 @@ export default {
 }
 
 .row-value {
+  float: left;
   width: 400px;
   border-radius: 2px;
 }
 
 .row-img {
   max-height: 120px;
+  margin-top: 20px;
+}
+
+.close-edit-btn {
   margin-top: 20px;
 }
 

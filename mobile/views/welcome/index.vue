@@ -21,7 +21,11 @@ export default {
       const usePxProperty = ['width', 'height', 'top', 'left'];
       element.style = element.style || {};
       Object.keys(element.style).forEach(key => {
-        if (usePxProperty.includes(key) && element.style[key] && element.style[key].indexOf('%') === -1) {
+        if (
+          usePxProperty.includes(key) &&
+          element.style[key] &&
+          element.style[key].indexOf('%') === -1
+        ) {
           element.style[key] = parseFloat(element.style[key]) + 'px';
         }
       });
@@ -38,11 +42,16 @@ export default {
           loadComponent(element, childList);
         });
       }
+      const cls = ['hsb-widget']
+      if (item.id === this.$store.state.editKey) {
+        cls.push('is-debug')
+      }
       const node = createElement(
         require(`../../hsb-components/${item.component}`).default,
         {
           style: validStyle(item),
-          props: item.props || item.prop || {}
+          props: item.props || item.prop || {},
+          class: cls
         },
         childList
       );
@@ -56,7 +65,7 @@ export default {
     return createElement(
       'div',
       {
-        class: 'hsb-page',
+        class: 'hsb-deco-page',
         attrs: {
           id: 'root',
           'data-pageId': 'demo'
@@ -67,3 +76,10 @@ export default {
   }
 };
 </script>
+
+<style lang="postcss" scoped>
+.is-debug {
+  padding: 10px 0;
+  background: red;
+}
+</style>

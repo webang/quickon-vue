@@ -12,6 +12,7 @@ export default {
 
 <style lang="postcss" scoped>
 .hsb-container {
+  overflow: hidden;
   position: relative;
 }
 </style>

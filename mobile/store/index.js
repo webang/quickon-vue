@@ -9,6 +9,7 @@ vue.use(vuex);
 
 export default new vuex.Store({
   state: {
+    editKey: '',
     pageData: {
       title: '',
       widget: []
@@ -27,6 +28,9 @@ export default new vuex.Store({
         }
       });
       state.pageData = data;
+    },
+    setEditKey(state, data) {
+      state.editKey = data;
     }
   },
   actions: {
@@ -35,7 +39,6 @@ export default new vuex.Store({
       if (!obj.pageId) {
         commit('setPageData', store.get('editProps'));
       } else {
-        console.log(obj.pageId);
         pageApi.getPageDetails(obj.pageId).then(res => {
           res = res.data;
           res.data.widget = JSON.parse(res.data.widget);

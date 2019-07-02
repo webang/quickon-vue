@@ -58,5 +58,8 @@ export default {
   'hsb-click-area': {
     url: '',
     link: productUrl
+  },
+  'hsb-column': {
+    column: 2
   }
 };

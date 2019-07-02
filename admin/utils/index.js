@@ -1,26 +1,24 @@
 // import Hashids from 'hashids'
 
 export function getUniqueKey() {
-  var d = new Date().getTime()
+  var d = new Date().getTime();
   if (window.performance && typeof window.performance.now === 'function') {
-    d += performance.now() // use high-precision timer if available
+    d += performance.now(); // use high-precision timer if available
   }
-  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (
-    c
-  ) {
-    var r = (d + Math.random() * 16) % 16 | 0
-    d = Math.floor(d / 16)
-    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
-  })
-  return uuid.replace(/-/g, '').substr(0, 8)
+  var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+  return uuid.replace(/-/g, '').substr(0, 8);
 }
 
 export function isDef(val) {
-  return val !== undefined
+  return val !== undefined;
 }
 
 export function trim(val) {
-  return val.replace(/(^\s*)|(\s*$)/g, '')
+  return val.replace(/(^\s*)|(\s*$)/g, '');
 }
 
 export function getInitPageConf() {
@@ -57,7 +55,7 @@ export function getInitPageConf() {
       }
     ],
     status: 0
-  }
+  };
 }
 
 export default {
@@ -65,4 +63,4 @@ export default {
   isDef,
   trim,
   getInitPageConf
-}
+};

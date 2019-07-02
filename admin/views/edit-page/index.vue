@@ -1,31 +1,39 @@
 <template>
-  <div class="view">
-    <!-- 导航 -->
-    <el-breadcrumb class="doc-crumb" separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ path: '/PageList' }">页面列表</el-breadcrumb-item>
-      <el-breadcrumb-item>页面详情</el-breadcrumb-item>
-    </el-breadcrumb>
-    <div class="doc-row container">
+  <div class="deco-view">
+    <div class="header">
+      <div class="btn-back">
+        <div class="click-area" @click="$router.back()">
+          <el-icon class="el-icon-arrow-left"></el-icon>
+          <span>返回</span>
+        </div>
+        <span class="name">{{ $route.query.name }}</span>
+      </div>
+      <ul class="btn-group">
+        <li @click="showPreCodeDialog=true">查看配置</li>
+        <li>预览</li>
+        <li @click="saveData">保存</li>
+        <li>发布</li>
+      </ul>
+    </div>
+
+    <div class="container">
       <!-- 模拟器 -->
       <div class="simulator">
-        <iframe id="simulator" :src="mobileUrl" frameborder="0"/>
+        <iframe id="simulator" :src="mobileUrl" frameborder="0" />
       </div>
+
       <!-- 编辑区域 -->
       <div class="drag-wrapper">
         <div class="etc-item">
           <div class="etc-value">
-            <nest-widget v-model="pageData.widget"/>
+            <nest-widget v-model="pageData.widget" />
           </div>
         </div>
         <div class="actions-bar">
           <el-button type="primary" size="small" @click="handleClickAddWidget">添加组件</el-button>
-          <el-button type="primary" size="small" @click="showPreCodeDialog=true">查看配置</el-button>
-          <div style="margin-top: 10px">
-            <el-button type="danger" size="small" @click="saveData">保存数据</el-button>
-          </div>
         </div>
       </div>
+
       <!-- 属性值编辑区 -->
       <div class="edit-widget">
         <edit-widget-area v-model="showEditWidgetDialog"/>
@@ -33,10 +41,10 @@
     </div>
 
     <!-- 配置数据弹窗 -->
-    <RawDisplay :code="pageData.widget" v-model="showPreCodeDialog"/>
+    <RawDisplay :code="pageData.widget" v-model="showPreCodeDialog" />
 
     <!-- 添加组件弹窗 -->
-    <AddWidget v-model="showAddWidgetDialog" @confirm="handleConfirmAddWidget"/>
+    <AddWidget v-model="showAddWidgetDialog" @confirm="handleConfirmAddWidget" />
   </div>
 </template>
 
@@ -51,6 +59,8 @@ import RawDisplay from '../../components/raw-display';
 import Utils from '../../utils';
 import apis from '../../apis';
 import { mapState } from 'vuex';
+import store from 'store';
+import MainHeader from '../../components/main-header';
 
 export default {
   components: {
@@ -84,6 +94,15 @@ export default {
       handler() {
         this.updateCacheData();
       }
+    },
+    editKey(val) {
+      store.set('editKey', val);
+      this.childWindow.postMessage(
+        {
+          type: 'setEditKey'
+        },
+        `${window.location.origin}/mobile.html`
+      );
     }
   },
   mounted() {
@@ -153,9 +172,54 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.container {
-  overflow: hidden;
+.header {
   display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  height: 60px;
+  line-height: 60px;
+  border-bottom: solid 1px #e6e6e6;
+  position: fixed;
+  padding: 0 30px;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  z-index: 100;
+  li {
+    float: left;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+      color: #409eff;
+    }
+  }
+  .click-area {
+    &:hover {
+      color: #409eff;
+      cursor: pointer;
+    }
+  }
+  .btn-back {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+  }
+  .name {
+    margin-left: 10px;
+  }
+}
+
+.container {
+  overflow-y: scroll;
+  position: fixed;
+  display: flex;
+  left: 60px;
+  top: 80px;
+  right: 0;
+  bottom: 0;
+  background-color: #f4f4f4;
 }
 
 .simulator {

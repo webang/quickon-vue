@@ -22,7 +22,7 @@ export default {
   },
 
   // 更新页面widget
-  updateWidget ({ pageId, widget }) {
+  updateWidget({ pageId, widget }) {
     return axios.post(`${apiBase}/api/page/${pageId}`, {
       widget: JSON.stringify(widget)
     });
