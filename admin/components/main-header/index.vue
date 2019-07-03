@@ -8,8 +8,7 @@
 </template>
 
 <script>
-export default {
-}
+export default {};
 </script>
 
 <style lang="postcss" scoped>
@@ -18,13 +17,9 @@ export default {
   width: 100%;
   height: 60px;
   background: #2a2a2a;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: row;
   flex-direction: row;
-  -ms-flex-pack: justify;
   justify-content: space-between;
-  -ms-flex-align: center;
   align-items: center;
   color: #fff;
   font-size: 14px;

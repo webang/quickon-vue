@@ -23,20 +23,19 @@ export function trim(val) {
 
 export function getInitPageConf() {
   return {
-    id: 1,
     name: '回收宝页面模板',
-    desc: '年中促销',
     title: '回收宝手机回收',
+    desc: '回收宝是国内领先的二手手机数码回收平台，专注于手机回收、二手手机回收、平板回收的线上回收平台',
     widget: [
       {
         id: getUniqueKey(),
-        component: 'hsb-container',
-        prop: {},
+        name: 'hsb-container',
+        props: {},
         child: [
           {
             id: getUniqueKey(),
-            component: 'hsb-image',
-            prop: {
+            name: 'hsb-image',
+            props: {
               url: 'https://s1.huishoubao.com/static/oRG0Lf3l.png',
               link: 'http://www.baidu.com'
             },
@@ -44,8 +43,8 @@ export function getInitPageConf() {
           },
           {
             id: getUniqueKey(),
-            component: 'hsb-link',
-            prop: {
+            name: 'hsb-link',
+            props: {
               url: 'https://s1.huishoubao.com/static/oRG0Lf3l.png',
               link: ''
             },

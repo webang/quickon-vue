@@ -10,9 +10,8 @@
       </div>
       <ul class="btn-group">
         <li @click="showPreCodeDialog=true">查看配置</li>
-        <li>预览</li>
-        <li @click="saveData">保存</li>
-        <li>发布</li>
+        <li @click="doCheck">预览</li>
+        <li @click="saveData">发布</li>
       </ul>
     </div>
 
@@ -36,7 +35,7 @@
 
       <!-- 属性值编辑区 -->
       <div class="edit-widget">
-        <edit-widget-area v-model="showEditWidgetDialog"/>
+        <edit-widget-area v-model="showEditWidgetDialog" />
       </div>
     </div>
 
@@ -115,10 +114,28 @@ export default {
      * 将编辑的数据保存到数据库
      */
     saveData() {
+      let widget;
+      try {
+        widget = JSON.stringify(this.pageData.widget);
+      } catch (error) {
+        this.$message({
+          type: 'error',
+          message: '格式有误'
+        });
+        return;
+      }
+      if (widget.length > 5000) {
+        this.$message({
+          type: 'error',
+          message: '长度超出限制'
+        });
+        return;
+      }
+
       apis
         .updateWidget({
-          pageId: this.$route.query.pageId,
-          widget: this.pageData.widget
+          widget,
+          pageId: this.$route.query.pageId
         })
         .then(res => {
           res = res.data;
@@ -166,6 +183,14 @@ export default {
      */
     getInitData() {
       this.pageData = this.$store.state.cacheData;
+    },
+
+    /**
+     * 预览
+     */
+    doCheck() {
+      const url = `${window.location.origin}/mobile.html`;
+      window.open(url);
     }
   }
 };

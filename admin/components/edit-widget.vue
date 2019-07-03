@@ -1,7 +1,7 @@
 <template>
   <div class="body" v-if="showEditWidget">
     <!-- 编辑图片 -->
-    <template v-if="curForm.component==='hsb-image'">
+    <template v-if="curForm.name==='hsb-image'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='url'">
           <div style="overflow: hidden">
@@ -18,7 +18,7 @@
     </template>
 
     <!-- 编辑链接 -->
-    <template v-if="curForm.component==='hsb-link'">
+    <template v-if="curForm.name==='hsb-link'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
@@ -32,7 +32,7 @@
     </template>
 
     <!-- 编辑热区 -->
-    <template v-if="curForm.component==='hsb-click-area'">
+    <template v-if="curForm.name==='hsb-click-area'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
@@ -49,7 +49,7 @@
     </template>
 
     <!-- 编辑优惠券 -->
-    <template v-if="curForm.component==='hsb-coupon'">
+    <template v-if="curForm.name==='hsb-coupon'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='id'">
           <span class="row-label">券ID</span>
@@ -66,7 +66,7 @@
     </template>
 
     <!-- 优惠券组 -->
-    <template v-if="curForm.component==='hsb-coupon-list'">
+    <template v-if="curForm.name==='hsb-coupon-list'">
       <div
         class="row coupon-list-prop"
         v-for="(key, index) in Object.keys(curForm.props)"
@@ -93,7 +93,7 @@
     </template>
 
     <!-- 多列 -->
-    <template v-if="curForm.component==='hsb-column'">
+    <template v-if="curForm.name==='hsb-column'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='column'">
           <span class="row-label">设置列数</span>
@@ -106,32 +106,50 @@
     <div class="common-style">
       <div class="row">
         <span class="row-label">容器宽度</span>
-        <!-- 
-        <el-button @click="styleObj.width=''" type="primary" plain size="mini">自适应</el-button>-->
-        <el-input class="row-value" v-model="styleObj.width" />
+        <input
+          class="row-value deco-input"
+          data-key="width"
+          :value="styleObj.width"
+          @input="handleStylePropChange"
+        />
       </div>
       <div class="row">
         <span class="row-label">容器高度</span>
-        <el-input class="row-value" v-model="styleObj.height" />
-        <!-- <el-slider class="row-value" v-model="styleObj.height" show-input :min="0" :max="750"/>
-        <el-button @click="styleObj.height=''" type="primary" plain size="mini">自适应</el-button>-->
-      </div>
-      <div class="row">
-        <span class="row-label">左侧偏移</span>
-        <el-input class="row-value" v-model="styleObj.left" />
+        <input
+          class="row-value deco-input"
+          data-key="height"
+          :value="styleObj.height"
+          @input="handleStylePropChange"
+        />
       </div>
       <div class="row">
         <span class="row-label">顶部偏移</span>
-        <el-input class="row-value" v-model="styleObj.top"></el-input>
+        <input
+          class="row-value deco-input"
+          data-key="top"
+          :value="styleObj.top"
+          @input="handleStylePropChange"
+        />
+      </div>
+      <div class="row">
+        <span class="row-label">左侧偏移</span>
+        <input
+          class="row-value deco-input"
+          data-key="left"
+          :value="styleObj.left"
+          @input="handleStylePropChange"
+        />
       </div>
       <div class="row">
         <span class="row-label">CSS代码</span>
-        <el-input
+        <textarea
           class="row-value row-textarea"
+          rows="10"
           autosize
           placeholder
           type="textarea"
-          v-model="styleStr"
+          :value="styleStr"
+          @input="handleStyleChange"
         />
       </div>
     </div>
@@ -162,6 +180,7 @@ export default {
         left: '',
         top: ''
       },
+      oStyleObj: {},
       curForm: {}
     };
   },
@@ -179,24 +198,81 @@ export default {
     styleObj: {
       deep: true,
       handler(val) {
-        Object.assign(this.curForm.style, {
+        const styleObj = {
+          ...this.curForm.style,
           ...val
-        });
-        this.$store.dispatch('handleEditForm', this.curForm);
+        };
+        this.curForm.style = styleObj;
+        // // 初始化 css 代码
+        // this.styleStr = Object.keys(styleObj)
+        //   .map(key => `${key}: ${styleObj[key]};`)
+        //   .join('\n');
       }
     }
   },
   created() {
     this.initEditData();
+    this.$watch('editForm', {
+      deep: true,
+      handler(val) {
+        this.initEditData();
+      }
+    });
     this.$watch('curForm', {
       deep: true,
       handler(val) {
         this.$store.dispatch('handleEditForm', val);
       }
     });
-    this.$watch('styleStr', val => {
+    this.dialogVisible = this.value;
+  },
+  methods: {
+    handleChange(val) {
+      console.log(val);
+    },
+    handleSliderChange(val) {
+      console.log(val);
+    },
+    isNum(val) {
+      if (val === '') {
+        return false;
+      }
+      const num = Number(val);
+      return !(num !== num);
+    },
+    // 输入 style 属性值
+    handleStylePropChange(event) {
+      const key = event.target.getAttribute('data-key');
+      this.styleObj[key] = event.target.value;
+      this.curForm.style = {
+        ...this.curForm.style,
+        ...this.styleObj
+      };
+
+      let curForm = this.curForm;
+      let allStyle = {};
+      let styleStr = '';
+
+      // 初始化被提出来的属性 width height ...
+      Object.keys(curForm.style).forEach(key => {
+        allStyle[key] = curForm.style[key];
+      });
+
+      // 初始化 css 代码
+      styleStr = Object.keys(allStyle)
+        .filter(key => allStyle[key])
+        .map(key => `${key}: ${allStyle[key]};`)
+        .join('\n');
+
+      this.styleStr = styleStr;
+    },
+
+    // 输入CSS代码
+    handleStyleChange(event) {
       const obj = {};
+      const val = event.target.value;
       const arr = val.replace(/\n/g, '').split(';');
+
       arr.forEach(element => {
         if (element.includes(':')) {
           const list = element.split(':');
@@ -205,19 +281,19 @@ export default {
           obj[key] = value;
         }
       });
-      Object.assign(this.curForm.style, {
-        ...obj
-      });
-      Object.keys(obj).forEach(key => {
-        if (Utils.isDef(this.styleObj[key])) {
+
+      Object.keys(this.styleObj).forEach(key => {
+        if (Utils.isDef(obj[key])) {
           this.styleObj[key] = obj[key];
+        } else {
+          this.styleObj[key] = '';
         }
       });
-      this.$store.dispatch('handleEditForm', this.curForm);
-    });
-    this.dialogVisible = this.value;
-  },
-  methods: {
+
+      this.styleStr = val;
+      this.curForm.style = obj;
+    },
+
     // 添加优惠券
     handleAddCoupon(index) {
       this.curForm.props.couponList.splice(index + 1, 0, {
@@ -238,42 +314,43 @@ export default {
 
     // 初始化当前编辑的数据
     initEditData() {
-      const curForm = this.editForm;
-      this.styleStr = '';
-      this.styleObj = {
+      let curForm = JSON.parse(JSON.stringify(this.editForm));
+      let styleStr = '';
+      let oStyleObj = {};
+      let styleObj = {
         width: '',
         height: '',
         left: '',
         top: ''
       };
+      let allStyle = {};
 
       // 校验 style 属性
-      if (!curForm.style) {
-        curForm.style = {};
-      }
+      if (!curForm.style) curForm.style = {};
 
       // 校验 props 属性
-      if (!curForm.props) {
-        curForm.props = curForm.prop || {};
-      }
+      if (!curForm.props) curForm.props = curForm.prop || {};
 
       // 初始化被提出来的属性 width height ...
-      Object.keys(this.styleObj).forEach(key => {
-        if (Utils.isDef(curForm.style[key])) {
-          this.styleObj[key] = curForm.style[key];
+      Object.keys(curForm.style).forEach(key => {
+        allStyle[key] = curForm.style[key];
+        if (Utils.isDef(styleObj[key])) {
+          styleObj[key] = curForm.style[key];
+        } else {
+          oStyleObj[key] = curForm.style[key];
         }
       });
 
       // 初始化 css 代码
-      const cssStrList = [];
-      console.log(curForm.style);
-      Object.keys(curForm.style).forEach(key => {
-        if (!Utils.isDef(this.styleObj[key])) {
-          cssStrList.push(`${key}: ${curForm.style[key]};`);
-        }
-      });
-      this.styleStr = cssStrList.join('\n');
+      styleStr = Object.keys(allStyle)
+        .filter(key => allStyle[key])
+        .map(key => `${key}: ${allStyle[key]};`)
+        .join('\n');
+
       this.curForm = curForm;
+      this.styleStr = styleStr;
+      this.styleObj = styleObj;
+      this.oStyleObj = oStyleObj;
     }
   }
 };
@@ -312,7 +389,28 @@ export default {
   margin-top: 20px;
 }
 
-/* 优惠券列表 */
-.coupon-list-prop {
+.row-textarea {
+  padding: 12px;
+  box-sizing: border-box;
+  outline: none;
+  background: #fff;
+  border: 1px solid #dcdfe6;
+  &:focus {
+    outline: 0;
+    border-color: #409eff;
+  }
+}
+
+.deco-input {
+  padding: 0 12px;
+  height: 40px;
+  box-sizing: border-box;
+  outline: none;
+  background: #fff;
+  border: 1px solid #dcdfe6;
+  &:focus {
+    outline: 0;
+    border-color: #409eff;
+  }
 }
 </style>

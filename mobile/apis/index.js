@@ -1,7 +1,10 @@
 import axios from 'axios';
+const config = {
+  apiBase: 'http://10.0.10.112:7001'
+};
 
 export default {
   getPageDetails(pageId) {
-    return axios(`http://localhost:7001/api/page/${pageId}`);
+    return axios(`${config.apiBase}/api/page/${pageId}`);
   }
 };

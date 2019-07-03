@@ -3,8 +3,16 @@ import { mapState } from 'vuex';
 export default {
   computed: {
     ...mapState({
+      pageData: state => state.pageData,
       widget: state => state.pageData.widget
     })
+  },
+  watch: {
+    pageData(val) {
+      document.title = val.title;
+      document.getElementsByName('keywords')[0].content = val.name;
+      document.getElementsByName('description')[0].content = val.desc;
+    }
   },
   created() {
     this.$store.dispatch('getPageData');
@@ -23,8 +31,8 @@ export default {
       Object.keys(element.style).forEach(key => {
         if (
           usePxProperty.includes(key) &&
-          element.style[key] &&
-          element.style[key].indexOf('%') === -1
+          element.style[key]
+          // element.style[key].indexOf('%') === -1
         ) {
           element.style[key] = parseFloat(element.style[key]) + 'px';
         }
@@ -42,12 +50,12 @@ export default {
           loadComponent(element, childList);
         });
       }
-      const cls = ['hsb-widget']
+      const cls = ['hsb-widget'];
       if (item.id === this.$store.state.editKey) {
-        cls.push('is-debug')
+        cls.push('is-debug');
       }
       const node = createElement(
-        require(`../../hsb-components/${item.component}`).default,
+        require(`../../hsb-components/${item.name}`).default,
         {
           style: validStyle(item),
           props: item.props || item.prop || {},

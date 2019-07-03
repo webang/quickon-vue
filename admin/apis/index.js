@@ -1,5 +1,5 @@
 import axios from 'axios';
-const apiBase = 'http://localhost:7001';
+const apiBase = 'http://10.0.10.112:7001';
 
 export default {
   updatePage({ pageId, title, widget }) {
@@ -24,7 +24,7 @@ export default {
   // 更新页面widget
   updateWidget({ pageId, widget }) {
     return axios.post(`${apiBase}/api/page/${pageId}`, {
-      widget: JSON.stringify(widget)
+      widget
     });
   }
 };

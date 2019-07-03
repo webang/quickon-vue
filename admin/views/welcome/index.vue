@@ -2,6 +2,7 @@
   <div class="deco-container">
     <main-header />
     <div class="container">
+      <!-- <Login></Login> -->
     </div>
   </div>
 </template>
@@ -13,9 +14,11 @@
 import apis from '../../apis';
 import MainHeader from '../../components/main-header';
 import AddPageDialog from '../../components/add-page-dialog';
+import Login from '../../components/login';
 
 export default {
   components: {
+    Login,
     MainHeader,
     AddPageDialog
   },

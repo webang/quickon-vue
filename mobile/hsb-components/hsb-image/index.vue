@@ -19,6 +19,7 @@ export default {
 
 <style lang="postcss" scoped>
 .hsb-image {
+  overflow: hidden;
   display: block;
 }
 

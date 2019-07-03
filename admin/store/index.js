@@ -73,6 +73,7 @@ export default new vuex.Store({
         });
       };
       finder(list);
+      state.cacheData.widget = [].concat(list);
       commit('setCacheData', state.cacheData);
     }
   }

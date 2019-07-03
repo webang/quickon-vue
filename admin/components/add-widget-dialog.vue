@@ -53,10 +53,11 @@ export default {
     handleConfirm() {
       const component = this.labelList[this.activeIndex];
       const data = {
-        component,
+        name: component,
         props: {
           ...propMap[component]
-        }
+        },
+        style: {}
       };
       // 配置哪些组件可以嵌套子组件
       const hasChildList = [

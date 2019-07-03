@@ -12,7 +12,7 @@
   padding: 8px 10px;
   border-radius: 2px;
   line-height: 24px;
-  margin: 10px 0;
+  /* margin: 10px 0; */
   cursor: move;
   position: relative;
   background: #fafafa;
@@ -38,7 +38,7 @@
   >
     <div class="item-group" :key="el.id" v-for="(el, index) in realValue">
       <div class="item" :class="{'is-active': el.id === editKey}">
-        <span>{{ nameMap[el.component] }}</span>
+        <span>{{ nameMap[el.name] }}</span>
         <span>{{ el.id.substr(0, 10) }}</span>
         <el-button class="btn" size="mini" plain @click="handleRemove(el, index)">删除</el-button>
         <el-button class="btn" size="mini" plain @click.native="handleEdit(el, index)">编辑</el-button>

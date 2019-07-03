@@ -10,4 +10,6 @@ ul, li {
 body {
   font-size: 14px;
   color: #333;
+  max-width: 750px;
+  margin: 0 auto;
 }

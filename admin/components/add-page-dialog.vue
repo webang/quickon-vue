@@ -3,15 +3,15 @@
     <div class="body">
       <div class="doc-edit-row">
         <span class="doc-edit-row-label">页面名称</span>
-        <el-input class="doc-edit-row-value" v-model="formObj.name"/>
+        <el-input class="doc-edit-row-value" v-model="formObj.name" />
       </div>
       <div class="doc-edit-row">
         <span class="doc-edit-row-label">页面标题</span>
-        <el-input class="doc-edit-row-value" v-model="formObj.title"/>
+        <el-input class="doc-edit-row-value" v-model="formObj.title" />
       </div>
       <div class="doc-edit-row">
         <span class="doc-edit-row-label">页面描述</span>
-        <el-input class="doc-edit-row-value" v-model="formObj.desc"/>
+        <el-input class="doc-edit-row-value" v-model="formObj.desc" />
       </div>
       <el-button class="btn" type="primary" @click="handleCancle">取 消</el-button>
       <el-button class="btn" type="primary" :disabled="disabled" @click="handleConfirm">保存</el-button>
@@ -28,11 +28,12 @@ export default {
     value: Boolean
   },
   data() {
+    const obj = Utils.getInitPageConf();
     return {
       formObj: {
-        title: '',
-        name: '',
-        desc: ''
+        name: obj.name,
+        title: obj.title,
+        desc: obj.desc
       }
     };
   },
@@ -87,11 +88,11 @@ export default {
      * 重置弹窗数据
      */
     resetData() {
-      this.formObj = {
-        title: '',
-        name: '',
-        desc: ''
-      };
+      // this.formObj = {
+      //   title: '',
+      //   name: '',
+      //   desc: ''
+      // };
     }
   }
 };

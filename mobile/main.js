@@ -6,6 +6,9 @@ import router from './router';
 import store from './store';
 import storage from 'store';
 import './styles/base.css';
+import Vconsole from 'vconsole';
+
+console.log(new Vconsole());
 
 Vue.config.productionTip = false;
 
