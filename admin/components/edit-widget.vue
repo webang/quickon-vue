@@ -20,6 +20,13 @@
     <!-- 编辑链接 -->
     <template v-if="curForm.name==='hsb-link'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
+        <template v-if="key==='url'">
+          <div style="overflow: hidden">
+            <span class="row-label">图片地址</span>
+            <el-input class="row-value" v-model="curForm.props[key]"></el-input>
+          </div>
+          <uploader v-model="curForm.props[key]" />
+        </template>
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
           <el-input class="row-value" v-model="curForm.props[key]"></el-input>
@@ -39,11 +46,11 @@
           <el-input class="row-value" v-model="curForm.props[key]" />
         </template>
         <template v-if="key==='url'">
-          <span class="row-label">图片地址</span>
-          <el-input class="row-value" v-model="curForm.props[key]" />
-          <div>
-            <img class="row-img" :src="curForm.props[key]" alt />
+          <div style="overflow: hidden">
+            <span class="row-label">图片地址</span>
+            <el-input class="row-value" v-model="curForm.props[key]"></el-input>
           </div>
+          <uploader v-model="curForm.props[key]" />
         </template>
       </div>
     </template>
@@ -56,11 +63,11 @@
           <el-input class="row-value" v-model="curForm.props[key]"></el-input>
         </template>
         <template v-if="key==='url'">
-          <span class="row-label">图片地址</span>
-          <el-input class="row-value" v-model="curForm.props[key]"></el-input>
-          <div>
-            <img class="row-img" :src="curForm.props[key]" alt />
+          <div style="overflow: hidden">
+            <span class="row-label">图片地址</span>
+            <el-input class="row-value" v-model="curForm.props[key]"></el-input>
           </div>
+          <uploader v-model="curForm.props[key]" />
         </template>
       </div>
     </template>

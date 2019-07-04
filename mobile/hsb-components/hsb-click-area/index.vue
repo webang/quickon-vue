@@ -81,4 +81,9 @@ export default {
   width: 50px;
   height: 50px;
 }
+
+img {
+  display: block;
+  width: 100%;
+}
 </style>
