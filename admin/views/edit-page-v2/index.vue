@@ -11,7 +11,7 @@
       <ul class="btn-group">
         <li @click="showPreCodeDialog=true">查看配置</li>
         <li @click="doCheck">预览</li>
-        <li @click="saveData">发布</li>
+        <li @click="handleSave">发布</li>
       </ul>
     </div>
 
@@ -111,6 +111,14 @@ export default {
     }
   },
   methods: {
+    handleSave() {
+      this.$confirm('确认之后会立即生效，确认发布？')
+        .then(() => {
+          this.saveData();
+        })
+        .catch(() => {});
+    },
+
     /**
      * 将编辑的数据保存到数据库
      */
