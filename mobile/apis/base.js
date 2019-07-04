@@ -14,7 +14,7 @@ export default {
    * @param {String} imgCode 短信验证码
    */
   getCode(tel, imgCode) {
-    return baseHttp.post(`/api/user/getCode`, { tel });
+    return baseHttp.post(`/api/user/getCode`, { tel, imgCode });
   },
 
   /**

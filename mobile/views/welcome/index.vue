@@ -93,7 +93,10 @@ export default {
   position: relative;
 }
 
+/* .hsb-widget:hover, */
 .is-debug {
+  box-sizing: border-box;
+  cursor: all-scroll;
   border: 2px solid #409eff;
 }
 </style>

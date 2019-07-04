@@ -4,7 +4,7 @@
     <div class="form">
       <van-cell-group>
         <div class="form-item">
-          <van-field class="tel-input" v-model="tel" placeholder="手机号码"/>
+          <van-field class="tel-input" v-model="tel" placeholder="手机号码" />
           <van-button
             class="code-button"
             type="primary"
@@ -13,7 +13,7 @@
             @click="handleGetCode"
           >获取验证码</van-button>
         </div>
-        <van-field v-model="code" placeholder="短信验证码"/>
+        <van-field v-model="code" placeholder="短信验证码" />
       </van-cell-group>
       <van-button
         class="button"
@@ -24,6 +24,9 @@
         @click="handleLogin"
       >立即登录</van-button>
     </div>
+    <div v-if="showCodePop">
+      <CodePop :url="codeUrl" @confirm="handleConfirmImgCode"></CodePop>
+    </div>
   </div>
 </template>
 
@@ -33,6 +36,7 @@ import { Field, Button, CellGroup, Cell, Toast } from 'vant';
 import { mapState } from 'vuex';
 import store from 'store';
 import baseApi from '../../apis/base';
+import CodePop from './code-pop';
 
 Vue.use(Field)
   .use(Button)
@@ -40,18 +44,26 @@ Vue.use(Field)
   .use(Cell);
 
 export default {
+  components: {
+    CodePop
+  },
   props: {
     onLogin: Function
   },
   data() {
     return {
-      tel: '13249064450',
-      code: '143934',
+      tel: '',
+      code: '',
       imgCode: '',
-      loading: false
+      loading: false,
+      codeUrl: '',
+      showCodePop: false
     };
   },
   computed: {
+    ...mapState({
+      token: state => state.user.token
+    }),
     disabled() {
       return this.tel.length !== 11 || this.code.length < 6;
     },
@@ -65,19 +77,38 @@ export default {
     }
   },
   methods: {
-    async handleGetCode() {
+    // 获取验证码
+    handleGetCode() {
       baseApi.getCode(this.tel, this.imgCode).then(res => {
-        console.log(res);
+        if (+res._errCode === 0) {
+          if (res._data.captchaUrl) {
+            this.codeUrl = res._data.captchaUrl;
+            this.showCodePop = true;
+          } else {
+            Toast('验证码已发送');
+          }
+        }
       });
     },
+
+    // 点击登录
     async handleLogin() {
       this.$store.dispatch('user/login', {
         tel: this.tel,
         code: this.code
       });
     },
+
+    // 关闭登录
     handleClose() {
       this.$store.commit('user/setShowLogin', false);
+    },
+
+    // 确认图片验证码
+    handleConfirmImgCode(val) {
+      this.imgCode = val;
+      this.showCodePop = false;
+      this.handleGetCode();
     }
   }
 };

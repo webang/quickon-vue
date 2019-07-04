@@ -18,7 +18,7 @@ export default {
     },
     setToken(state, data) {
       state.token = data;
-      store.set('userInfo', data);
+      store.set('token', data);
     },
     setUserInfo(state, data) {
       state.userInfo = data;
@@ -31,6 +31,7 @@ export default {
         if (+res._errCode === 0) {
           commit('setUserInfo', res._data);
           commit('setToken', res._data.token);
+          commit('setShowLogin', false);
         } else {
           Toast(res._errStr);
         }

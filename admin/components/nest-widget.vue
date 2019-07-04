@@ -12,13 +12,13 @@
   padding: 8px 10px;
   border-radius: 2px;
   line-height: 24px;
-  /* margin: 10px 0; */
   cursor: move;
   position: relative;
   background: #fafafa;
   border: 1px solid #d9d9d9;
   &.is-active {
-    border-color: red;
+    color: #fff;
+    background: #409EFF;
   }
 }
 

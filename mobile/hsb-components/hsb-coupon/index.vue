@@ -7,7 +7,6 @@
 <script>
 import { Toast } from 'vant';
 import baseApi from '../../apis/base';
-
 export default {
   name: 'hsb-coupon',
   props: {
@@ -22,11 +21,15 @@ export default {
   },
   methods: {
     handleClick() {
-      if (!this.$store.state.user.token) {
-        this.$store.commit('user/setShowLogin', true);
-      } else {
-        this.doAddCoupon();
-      }
+      baseApi.checkLoginStatus().then(res => {
+        if (+res._errCode === 0) {
+          if (res._data.status === 1) {
+            this.doAddCoupon();
+          } else {
+            this.$store.commit('user/setShowLogin', true);
+          }
+        }
+      });
     },
     doAddCoupon() {
       baseApi.addCoupon({ id: this.id }).then(res => {
@@ -43,9 +46,6 @@ export default {
 
 <style lang="postcss" scoped>
 .hsb-coupon {
-  width: 168px;
-  height: 116px;
-  margin-top: 10px;
 }
 
 img {

@@ -107,7 +107,7 @@
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='text'">
           <span class="row-label">文本內容</span>
-          <el-input class="row-value" v-model="curForm.props[key]" />
+          <el-input class="row-value" type="textarea" autosize v-model="curForm.props[key]" />
         </template>
       </div>
     </template>

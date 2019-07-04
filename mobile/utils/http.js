@@ -17,7 +17,8 @@ const createApiSign = (query, body) => {
   const data = Object.assign({}, query, body);
   const kv = [];
   for (const key in data) {
-    if (data[key]) kv.push(key + data[key]);
+    // if (data[key])
+    kv.push(key + data[key]);
   }
   let signStr = kv.sort().join('');
   signStr = `${signStr}${appSecret}`;
