@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: 'hsb-column',
   props: {
     column: {
       type: [Number, String],

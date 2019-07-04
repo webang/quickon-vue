@@ -3,8 +3,8 @@ import { mapState } from 'vuex';
 export default {
   computed: {
     ...mapState({
-      pageData: state => state.pageData,
-      widget: state => state.pageData.widget
+      pageData: state => state.cacheData,
+      widget: state => state.cacheData.widget
     })
   },
   watch: {
@@ -14,9 +14,9 @@ export default {
       document.getElementsByName('description')[0].content = val.desc;
     }
   },
-  created() {
-    this.$store.dispatch('getPageData');
-  },
+  // created() {
+  //   this.$store.dispatch('getPageData');
+  // },
   render(createElement) {
     const widget = JSON.parse(JSON.stringify(this.widget));
     const vNodeList = [];
@@ -55,17 +55,17 @@ export default {
         cls.push('is-debug');
       }
       const node = createElement(
-        require(`../../hsb-components/${item.name}`).default,
+        require(`../../../../mobile/hsb-components/${item.name}`).default,
         {
           style: validStyle(item),
           props: item.props || item.prop || {},
-          class: cls,
-          attrs: {
-            'data-widget': item.id
-          }
+          class: cls
         },
         childList
       );
+      // const widget = createElement(
+      //   'div',
+      // )
       nodeList.push(node);
     };
 
@@ -76,11 +76,7 @@ export default {
     return createElement(
       'div',
       {
-        class: 'hsb-deco-page',
-        attrs: {
-          id: 'root',
-          'data-pageId': 'demo'
-        }
+        class: 'hsb-deco-page'
       },
       vNodeList
     );
@@ -91,6 +87,25 @@ export default {
 <style lang="postcss" scoped>
 .hsb-deco-page {
   position: relative;
+  overflow-y: auto;
+  width: 375px;
+  height: 667px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #333;
+}
+
+.hsb-widget {
+  position: relative;
+  &::after {
+    z-index: 2;
+    position: absolute;
+    content: ' ';
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .is-debug {

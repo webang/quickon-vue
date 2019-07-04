@@ -1,6 +1,6 @@
 <template>
-  <div class="hsb-coupon" :data-id="id" :data-url="url">
-    <img :src="url" @click="handleClick" alt>
+  <div class="hsb-coupon" :data-id="id">
+    <img :src="url" @click="handleClick" alt />
   </div>
 </template>
 
@@ -41,13 +41,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="postcss" scoped>
 .hsb-coupon {
-  float: left;
   width: 168px;
   height: 116px;
   margin-top: 10px;
 }
+
 img {
   display: block;
   width: 100%;

@@ -61,5 +61,12 @@ export default {
   },
   'hsb-column': {
     column: 2
+  },
+  'hsb-counter': {},
+  'hsb-banner': {},
+  'hsb-form': {},
+  'hsb-divider': {},
+  'hsb-text': {
+    text: '文本内容'
   }
 };

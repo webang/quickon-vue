@@ -51,7 +51,7 @@
 <script>
 import { mapState } from 'vuex';
 import draggable from 'vuedraggable';
-import nameMap from '../../mobile/name-map';
+import widgetMenu from '../../mobile/widget-menu';
 
 export default {
   name: 'nested-widget',
@@ -72,7 +72,7 @@ export default {
   },
   data() {
     return {
-      nameMap
+      nameMap: widgetMenu.widgetLabel
     };
   },
   computed: {

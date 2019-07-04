@@ -7,9 +7,10 @@ import store from './store';
 import './styles/base.css';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import { registerComponent } from '../mobile/registerComponent';
 
+registerComponent(Vue);
 Vue.use(ElementUI);
-
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */

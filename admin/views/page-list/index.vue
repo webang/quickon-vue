@@ -95,7 +95,7 @@ export default {
       data.widget = JSON.parse(data.widget);
       this.$store.commit('setEditKey', '');
       this.$store.commit('setCacheData', data);
-      this.$router.push(`/EditPage?pageId=${data.id}&name=${data.name}`);
+      this.$router.push(`/EditPageV2?pageId=${data.id}&name=${data.name}`);
     }
   },
   mounted() {

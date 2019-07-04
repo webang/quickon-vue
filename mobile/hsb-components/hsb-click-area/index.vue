@@ -1,6 +1,6 @@
 <template>
-  <div class="hsb-click-area">
-    <img v-if="url" :src="url" alt>
+  <div class="hsb-click-area" @click="handleClick">
+    <img v-if="url" :src="url" alt />
     <span v-if="text">{{ text }}</span>
   </div>
 </template>
@@ -21,6 +21,13 @@ export default {
       type: String,
       default: ''
     }
+  },
+  methods: {
+    handleClick() {
+      if (this.link) {
+        window.location.href = this.link;
+      }
+    }
   }
 };
 </script>
@@ -29,10 +36,7 @@ export default {
 .hsb-click-area {
   z-index: 5;
   position: absolute;
-  left: 0;
-  top: 0;
   width: 50px;
   height: 50px;
-  border: 1px red solid;
 }
 </style>

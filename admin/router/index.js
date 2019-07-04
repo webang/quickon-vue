@@ -2,8 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Welcome from '../views/welcome';
-import EditPage from '../views/edit-page';
 import PageList from '../views/page-list';
+import EditPageV2 from '../views/edit-page-v2';
 
 Vue.use(Router);
 
@@ -15,9 +15,9 @@ export default new Router({
       component: Welcome
     },
     {
-      name: 'EditPage',
-      path: '/EditPage',
-      component: EditPage
+      name: 'EditPageV2',
+      path: '/EditPageV2',
+      component: EditPageV2
     },
     {
       name: 'PageList',

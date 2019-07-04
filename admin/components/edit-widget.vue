@@ -102,6 +102,16 @@
       </div>
     </template>
 
+    <!-- 文本 -->
+    <template v-if="curForm.name==='hsb-text'">
+      <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
+        <template v-if="key==='text'">
+          <span class="row-label">文本內容</span>
+          <el-input class="row-value" v-model="curForm.props[key]" />
+        </template>
+      </div>
+    </template>
+
     <!-- 公共属性 -->
     <div class="common-style">
       <div class="row">
@@ -137,6 +147,24 @@
           class="row-value deco-input"
           data-key="left"
           :value="styleObj.left"
+          @input="handleStylePropChange"
+        />
+      </div>
+      <div class="row">
+        <span class="row-label">右侧偏移</span>
+        <input
+          class="row-value deco-input"
+          data-key="right"
+          :value="styleObj.right"
+          @input="handleStylePropChange"
+        />
+      </div>
+      <div class="row">
+        <span class="row-label">底部偏移</span>
+        <input
+          class="row-value deco-input"
+          data-key="bottom"
+          :value="styleObj.bottom"
           @input="handleStylePropChange"
         />
       </div>
@@ -178,7 +206,9 @@ export default {
         width: '',
         height: '',
         left: '',
-        top: ''
+        top: '',
+        right: '',
+        bottom: ''
       },
       oStyleObj: {},
       curForm: {}
