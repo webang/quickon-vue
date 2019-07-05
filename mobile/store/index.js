@@ -40,7 +40,6 @@ export default new vuex.Store({
         commit('setPageData', store.get('editProps'));
       } else {
         pageApi.getPageDetails(obj.pageId).then(res => {
-          res = res.data;
           res.data.widget = JSON.parse(res.data.widget);
           commit('setPageData', res.data);
         });

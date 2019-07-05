@@ -147,7 +147,6 @@ export default {
           pageId: this.$route.query.pageId
         })
         .then(res => {
-          res = res.data;
           if (res.errCode === 0) {
             this.$message({
               type: 'success',

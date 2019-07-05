@@ -1,5 +1,5 @@
 <template>
-  <div class="hsb-coupon" :data-id="id">
+  <div class="hsb-coupon" :data-coupon="id">
     <img :src="url" @click="handleClick" alt />
   </div>
 </template>

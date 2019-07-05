@@ -58,7 +58,6 @@ export default {
     doGetPageList() {
       this.loading = true;
       apis.getPageList().then(res => {
-        res = res.data;
         if (res.errCode === 0) {
           setTimeout(() => {
             this.tableData = res.data.list;

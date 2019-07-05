@@ -81,7 +81,7 @@ export default {
     &.is-active {
       border-color: #409eff;
     }
-    cursor: all-scroll;
+    cursor: pointer;
   }
   &__menu-list {
     overflow: hidden;
