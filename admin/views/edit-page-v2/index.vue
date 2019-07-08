@@ -46,7 +46,7 @@
 /**
  * @documention 编辑页面组件
  */
-import EditWidgetArea from '../../components/edit-widget';
+import EditWidgetArea from '../../components/edit-widget-props';
 import NestWidget from '../../components/nest-widget';
 import RawDisplay from '../../components/raw-display';
 import Utils from '../../utils';

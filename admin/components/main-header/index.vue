@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <span>FK页面装修系统</span>
+    <span>蜗壳页面装修系统</span>
     <div class="menu">
       <router-link class="link" to="/PageList">页面列表</router-link>
     </div>

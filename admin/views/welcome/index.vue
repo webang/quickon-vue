@@ -1,9 +1,8 @@
 <template>
   <div class="deco-container">
     <main-header />
-    <!-- <div class="container">
-      <Login></Login>
-    </div> -->
+    <div class="container">
+    </div>
   </div>
 </template>
 
@@ -29,6 +28,8 @@ export default {
 <style lang="postcss" scoped>
 .container {
   padding: 0 30px;
+  padding-top: 30px;
+  text-align: center;
 }
 
 .table-footer {

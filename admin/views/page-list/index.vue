@@ -14,10 +14,16 @@
         <el-table-column prop="desc" label="页面描述" />
         <el-table-column prop="title" label="页面标题" width="200" />
         <el-table-column prop="status" label="页面状态" width="200" />
-        <el-table-column label="页面状态" width="200">
+        <el-table-column label="页面状态" width="300">
           <template slot-scope="scope">
-            <el-button size="small" type="primary" @click="handleShow(scope.row)">线上查看</el-button>
-            <el-button size="small" type="primary" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button size="small" plain type="primary" @click="handleShow(scope.row)">线上预览</el-button>
+            <el-button size="small" plain type="primary" @click="handleEditPageMeta(scope.row)">修改标题</el-button>
+            <el-button
+              size="small"
+              plain
+              type="primary"
+              @click="handleEditPageWidget(scope.row)"
+            >编辑组件</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -37,6 +43,11 @@
     </div>
     <!-- 新增页面弹窗 -->
     <add-page-dialog v-model="addPageDialogVisible" @add-success="handleAddSuccess" />
+    <edit-page-meta
+      v-model="editPageMetaVisible"
+      :form-data="pageMeta"
+      @confirm="handleEditMetaSuccess"
+    />
   </div>
 </template>
 
@@ -47,10 +58,12 @@
 import apis from '../../apis';
 import MainHeader from '../../components/main-header';
 import AddPageDialog from '../../components/add-page-dialog';
+import EditPageMeta from '../../components/edit-page-meta';
 
 export default {
   components: {
     MainHeader,
+    EditPageMeta,
     AddPageDialog
   },
   data() {
@@ -60,15 +73,19 @@ export default {
       pageIndex: 1,
       tableData: [],
       loading: false,
-      addPageDialogVisible: false
+      editPageMetaVisible: false,
+      addPageDialogVisible: false,
+      pageMeta: null
     };
   },
   methods: {
+    // 分页索引
     handleCurrentChange(val) {
       this.pageIndex = val;
       this.doGetPageList();
     },
 
+    // 页面列表
     doGetPageList() {
       this.loading = true;
       apis
@@ -93,23 +110,43 @@ export default {
               message: '获取数据失败'
             });
           }
+        })
+        .catch(error => {
+          this.$message({
+            type: 'error',
+            message: error
+          });
         });
     },
 
+    // 添加页面成功
     handleAddSuccess() {
       this.doGetPageList();
     },
 
+    // 预览
     handleShow({ id }) {
       const url = `${window.location.origin}/mobile.html?pageId=${id}`;
       window.open(url);
     },
 
-    handleEdit(data) {
+    // 编辑页面组件
+    handleEditPageWidget(data) {
       data.widget = JSON.parse(data.widget);
       this.$store.commit('setEditKey', '');
       this.$store.commit('setCacheData', data);
       this.$router.push(`/EditPageV2?pageId=${data.id}&name=${data.name}`);
+    },
+
+    // 编辑页面标题
+    handleEditPageMeta(data) {
+      this.pageMeta = data;
+      this.editPageMetaVisible = true;
+    },
+
+    // 编辑页面标题成功
+    handleEditMetaSuccess() {
+      this.doGetPageList();
     }
   },
   mounted() {

@@ -5,6 +5,7 @@ import Welcome from '../views/welcome';
 import PageList from '../views/page-list';
 import EditPageV2 from '../views/edit-page-v2';
 import Login from '../views/login';
+import RichTextList from '../views/rich-text-list';
 
 Vue.use(Router);
 
@@ -29,6 +30,11 @@ export default new Router({
       name: 'PageList',
       path: '/PageList',
       component: PageList
+    },
+    {
+      name: 'RichTextList',
+      path: '/RichTextList',
+      component: RichTextList
     }
   ]
 });

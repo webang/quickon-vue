@@ -1,5 +1,5 @@
 <template>
-  <p class="hsb-text">{{ text }}</p>
+  <p class="hsb-text" v-html="text"></p>
 </template>
 
 <script>

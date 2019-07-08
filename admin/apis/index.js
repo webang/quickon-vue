@@ -1,15 +1,9 @@
 import httpInstance from './http';
 
 export default {
-  updatePage({ pageId, title, widget }) {
-    return httpInstance(`/admin/page?pageId=${pageId}&title=${title}&widget=${widget}`);
-  },
-
   // 获取页面列表
   getPageList({ pageIndex, pageSize }) {
-    return httpInstance.get(
-      `/admin/page?pageIndex=${pageIndex}&pageSize=${pageSize}`
-    );
+    return httpInstance.get(`/admin/page?pageIndex=${pageIndex}&pageSize=${pageSize}`);
   },
 
   // 添加页面
@@ -25,6 +19,17 @@ export default {
   // 更新页面widget
   updateWidget({ pageId, widget }) {
     return httpInstance.post(`/admin/page/${pageId}`, {
+      widget
+    });
+  },
+
+  // 更新页面
+  updatePage({ pageId, widget, name, title, desc }) {
+    return httpInstance.post(`/admin/page/${pageId}`, {
+      pageId,
+      name,
+      title,
+      desc,
       widget
     });
   },
