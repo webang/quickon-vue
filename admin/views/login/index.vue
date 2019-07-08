@@ -1,9 +1,9 @@
 <template>
   <div class="deco-container">
     <main-header />
-    <!-- <div class="container">
+    <div class="container">
       <Login></Login>
-    </div> -->
+    </div>
   </div>
 </template>
 

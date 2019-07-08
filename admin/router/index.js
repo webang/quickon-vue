@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import Welcome from '../views/welcome';
 import PageList from '../views/page-list';
 import EditPageV2 from '../views/edit-page-v2';
+import Login from '../views/login';
 
 Vue.use(Router);
 
@@ -13,6 +14,11 @@ export default new Router({
       name: 'Welcome',
       path: '/',
       component: Welcome
+    },
+    {
+      name: 'Login',
+      path: '/Login',
+      component: Login
     },
     {
       name: 'EditPageV2',

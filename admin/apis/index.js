@@ -2,14 +2,14 @@ import httpInstance from './http';
 
 export default {
   updatePage({ pageId, title, widget }) {
-    return httpInstance(
-      `/admin/page?pageId=${pageId}&title=${title}&widget=${widget}`
-    );
+    return httpInstance(`/admin/page?pageId=${pageId}&title=${title}&widget=${widget}`);
   },
 
   // 获取页面列表
-  getPageList() {
-    return httpInstance.get(`/admin/page`);
+  getPageList({ pageIndex, pageSize }) {
+    return httpInstance.get(
+      `/admin/page?pageIndex=${pageIndex}&pageSize=${pageSize}`
+    );
   },
 
   // 添加页面

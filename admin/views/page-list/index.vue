@@ -24,6 +24,15 @@
       <!-- 底部按钮 -->
       <div class="table-footer">
         <el-button type="primary" plain @click="addPageDialogVisible=true">新建页面</el-button>
+        <el-pagination
+          style="float:right"
+          background
+          layout="total, prev, pager, next"
+          :total="total"
+          :current-page="pageIndex"
+          :page-size="pageSize"
+          @current-change="handleCurrentChange"
+        />
       </div>
     </div>
     <!-- 新增页面弹窗 -->
@@ -46,50 +55,56 @@ export default {
   },
   data() {
     return {
+      total: 0,
+      pageSize: 10,
+      pageIndex: 1,
       tableData: [],
       loading: false,
       addPageDialogVisible: false
     };
   },
   methods: {
-    /**
-     * 获取页面列表
-     */
-    doGetPageList() {
-      this.loading = true;
-      apis.getPageList().then(res => {
-        if (res.errCode === 0) {
-          setTimeout(() => {
-            this.tableData = res.data.list;
-            this.loading = false;
-          }, 300);
-        } else {
-          this.$message({
-            type: 'error',
-            message: '获取数据失败'
-          });
-        }
-      });
+    handleCurrentChange(val) {
+      this.pageIndex = val;
+      this.doGetPageList();
     },
 
-    /**
-     * 当添加成功时刷新列表数据
-     */
+    doGetPageList() {
+      this.loading = true;
+      apis
+        .getPageList({
+          pageIndex: this.pageIndex - 1,
+          pageSize: this.pageSize
+        })
+        .then(res => {
+          this.loading = false;
+          if (res.errCode === 0) {
+            this.tableData = res.data.list;
+            this.total = res.data.total;
+          } else if (res.errCode === 10000) {
+            this.$message({
+              type: 'error',
+              message: '请先登录'
+            });
+            this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+          } else {
+            this.$message({
+              type: 'error',
+              message: '获取数据失败'
+            });
+          }
+        });
+    },
+
     handleAddSuccess() {
       this.doGetPageList();
     },
 
-    /**
-     * 线上地址
-     */
     handleShow({ id }) {
       const url = `${window.location.origin}/mobile.html?pageId=${id}`;
       window.open(url);
     },
 
-    /**
-     * 点击编辑时，先将当前编辑项数据存到本地
-     */
     handleEdit(data) {
       data.widget = JSON.parse(data.widget);
       this.$store.commit('setEditKey', '');

@@ -2,8 +2,8 @@ import store from 'store';
 import adminApi from '../../apis';
 import { Toast } from 'vant';
 
-const token = store.get('token');
-const userInfo = store.get('userInfo');
+const token = store.get('fk_token');
+const userInfo = store.get('fk_userInfo');
 
 export default {
   namespaced: true,

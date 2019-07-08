@@ -1,10 +1,15 @@
 import axios from 'axios';
-const config = {
-  apiBase: 'http://10.0.10.112:7001'
-};
+
+// const isProd = process.env.NODE_ENV === 'production';
+// const apiBase = isProd ? 'http://kbapi.airtlab.com' : 'http://localhost:7001';
+const apiBase = 'http://kbapi.airtlab.com';
+
+const instance = axios.create({
+  baseURL: apiBase
+});
 
 export default {
   getPageDetails(pageId) {
-    return axios(`${config.apiBase}/api/page/${pageId}`);
+    return instance.get(`/api/page/${pageId}`);
   }
 };

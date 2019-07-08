@@ -1,12 +1,16 @@
 import vuex from 'vuex';
 import vue from 'vue';
 import store from 'store';
+import user from './module/user';
 
 vue.use(vuex);
 
 const editProps = store.get('editProps') || {};
 
 export default new vuex.Store({
+  modules: {
+    user
+  },
   state: {
     showEditWidget: false,
     editKey: '',

@@ -34,10 +34,14 @@ export default {
       }
     };
   },
+  computed: {
+    redirect() {
+      return this.$route.query.redirect;
+    }
+  },
   methods: {
     handleLogin() {
       pageApi.login(this.formLabelAlign).then(res => {
-        res = res.data;
         if (res.errCode === 0) {
           store.set('fk_user', res.data);
           store.set('fk_token', res.data.token);
@@ -45,6 +49,9 @@ export default {
             type: 'success',
             message: '登录成功'
           });
+          if (this.redirect) {
+            this.$router.replace(this.redirect);
+          }
         } else {
           this.$message({
             type: 'error',

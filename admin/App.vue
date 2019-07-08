@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <!-- <Login /> -->
+    <Login v-if="showLogin"/>
   </div>
 </template>
 
@@ -11,6 +11,11 @@ export default {
   name: 'App',
   components: {
     Login
+  },
+  computed: {
+    showLogin () {
+      return this.$store.state.user.showLogin
+    }
   }
 };
 </script>
