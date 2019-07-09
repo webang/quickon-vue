@@ -9,6 +9,11 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import { registerComponent } from '../mobile/registerComponent';
 
+import '../static/UE/ueditor.config.js';
+import '../static/UE/ueditor.all.min.js';
+import '../static/UE/lang/zh-cn/zh-cn.js';
+import '../static/UE/ueditor.parse.min.js';
+
 registerComponent(Vue);
 Vue.use(ElementUI);
 Vue.config.productionTip = false;

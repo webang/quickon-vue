@@ -2,7 +2,8 @@
   <div class="header">
     <span>蜗壳页面装修系统</span>
     <div class="menu">
-      <router-link class="link" to="/PageList">页面列表</router-link>
+      <router-link class="link" to="/PageList">页面管理</router-link>
+      <router-link class="link" to="/RichTextList">富文本管理</router-link>
     </div>
   </div>
 </template>
@@ -33,6 +34,7 @@ export default {};
 }
 
 .link {
+  margin-left: 20px;
   color: #fff;
 }
 

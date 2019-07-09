@@ -28,7 +28,7 @@ export function buildQuerys(url, obj) {
 }
 
 const isProd = process.env.NODE_ENV === 'production';
-const apiBase = isProd ? 'http://kbapi.airtlab.com' : 'http://localhost:7001';
+const apiBase = isProd ? 'http://kbapi.airtlab.com' : 'http://10.0.10.112:7001';
 
 const instance = axios.create({
   baseURL: apiBase

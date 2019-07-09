@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import demo from '../views/demo';
-import welcome from '../views/welcome';
 
 Vue.use(Router);
 
@@ -10,12 +8,17 @@ export default new Router({
     {
       path: '/',
       name: 'welcome',
-      component: welcome
+      component: () => import('../views/welcome')
     },
     {
       path: '/demo',
       name: 'demo',
-      component: demo
+      component: () => import('../views/demo')
+    },
+    {
+      path: '/rich-text',
+      name: 'rich-text',
+      component: () => import('../views/rich-text')
     }
   ]
 });

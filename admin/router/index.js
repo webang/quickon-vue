@@ -6,6 +6,9 @@ import PageList from '../views/page-list';
 import EditPageV2 from '../views/edit-page-v2';
 import Login from '../views/login';
 import RichTextList from '../views/rich-text-list';
+import ckeditor from '../views/ckeditor';
+import neditor from '../views/neditor';
+import ue from '../views/ue';
 
 Vue.use(Router);
 
@@ -35,6 +38,21 @@ export default new Router({
       name: 'RichTextList',
       path: '/RichTextList',
       component: RichTextList
+    },
+    {
+      name: 'ckeditor',
+      path: '/ckeditor',
+      component: ckeditor
+    },
+    {
+      name: 'neditor',
+      path: '/neditor',
+      component: neditor
+    },
+    {
+      name: 'ue',
+      path: '/ue',
+      component: ue
     }
   ]
 });

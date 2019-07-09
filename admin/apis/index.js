@@ -1,6 +1,22 @@
 import httpInstance from './http';
 
 export default {
+  // 登录
+  login({ username, password }) {
+    return httpInstance.post(`/admin/user/login`, {
+      username,
+      password
+    });
+  },
+
+  // 注册
+  register({ username, password }) {
+    return httpInstance.post(`/admin/user/register`, {
+      username,
+      password
+    });
+  },
+
   // 获取页面列表
   getPageList({ pageIndex, pageSize }) {
     return httpInstance.get(`/admin/page?pageIndex=${pageIndex}&pageSize=${pageSize}`);
@@ -34,19 +50,33 @@ export default {
     });
   },
 
-  // 登录
-  login({ username, password }) {
-    return httpInstance.post(`/admin/user/login`, {
-      username,
-      password
+  // 获取富文本列表
+  getRichTextList({ pageIndex, pageSize }) {
+    return httpInstance.get(
+      `/admin/richText?pageIndex=${pageIndex}&pageSize=${pageSize}`
+    );
+  },
+
+  // 获取富文本详情
+  getRichTextDetail({ id }) {
+    return httpInstance.get(`/admin/richText/${id}`);
+  },
+
+  // 添加富文本
+  addRichText({ name, desc, content }) {
+    return httpInstance.post(`/admin/richText`, {
+      name,
+      desc,
+      content
     });
   },
 
-  // 登录
-  register({ username, password }) {
-    return httpInstance.post(`/admin/user/register`, {
-      username,
-      password
+  // 更新富文本
+  updateRichText({ id, name, desc, content }) {
+    return httpInstance.post(`/admin/richText/${id}`, {
+      name,
+      desc,
+      content
     });
   }
 };
