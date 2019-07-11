@@ -15,6 +15,7 @@
         <el-table-column prop="desc" label="描述" width="200" />
         <el-table-column label="动作" width="300">
           <template slot-scope="scope">
+            <el-button size="small" plain type="primary" @click="handleShow(scope.row)">预览</el-button>
             <el-button size="small" plain type="primary" @click="handleEdit(scope.row)">修改</el-button>
           </template>
         </el-table-column>
@@ -117,8 +118,13 @@ export default {
       this.$router.push(`/ue?id=${data.id}&name=${data.name}`);
     },
 
+    // 预览
+    handleShow({ id }) {
+      const url = `${window.location.origin}/mobile.html#/rich-text?id=${id}`;
+      window.open(url);
+    },
+
     handleAdd() {
-      console.log(store);
       store.remove('editRichText');
       this.$router.push(`/ue`);
     }
