@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <span>蜗壳页面装修系统</span>
+    <span class="title">quickon 页面装修系统</span>
     <div class="menu">
       <router-link class="link" to="/PageList">页面管理</router-link>
       <router-link class="link" to="/RichTextList">富文本管理</router-link>
@@ -26,6 +26,10 @@ export default {};
   font-size: 14px;
   padding-left: 30px;
   padding-right: 30px;
+}
+
+.title {
+  font-size: 16px;
 }
 
 .menu {
