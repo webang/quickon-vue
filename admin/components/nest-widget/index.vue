@@ -9,16 +9,20 @@
 
 .item {
   box-sizing: border-box;
-  padding: 8px 10px;
+  padding: 10px 10px;
   border-radius: 2px;
   line-height: 24px;
   cursor: move;
   position: relative;
   background: #fafafa;
   border: 1px solid #d9d9d9;
+  margin-bottom: 10px;
   &.is-active {
     color: #fff;
     background: #409EFF;
+  }
+  &:hover {
+    box-shadow: 0 1px 4px 0 rgba(0,0,0,.15);
   }
 }
 
