@@ -57,11 +57,11 @@ export default {
   position: fixed;
   left: 0;
   top: 60px;
-  width: 240px;
+  width: 220px;
   height: 100%;
   border-right: 1px solid #e8e8e8;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 16px;
+  padding-right: 16px;
   padding-bottom: 20px;
   box-sizing: border-box;
   overflow-y: auto;
@@ -79,7 +79,7 @@ export default {
     background: #f4f4f4;
     box-sizing: border-box;
     &.is-active {
-      border-color: #409eff;
+      background: #d1e3f3;
     }
     cursor: pointer;
   }
@@ -87,7 +87,7 @@ export default {
     overflow: hidden;
   }
   &__menu-item-icon {
-    font-size: 30px;
+    font-size: 24px;
     color: #409eff;
   }
   &__menu-item-text {
