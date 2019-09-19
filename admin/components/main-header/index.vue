@@ -26,6 +26,7 @@ export default {};
   font-size: 14px;
   padding-left: 30px;
   padding-right: 30px;
+  border-bottom: 1px solid #dcdfe6;
 }
 
 .title {

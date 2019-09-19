@@ -47,7 +47,9 @@
         <el-button class="btn" size="mini" plain @click="handleRemove(el, index)">删除</el-button>
         <el-button class="btn" size="mini" plain @click.native="handleEdit(el, index)">编辑</el-button>
       </div>
-      <nested-widget @edit-widget="handleEdit" class="item-sub" :list="el.child"/>
+      <template v-if="el.child">
+        <nested-widget @edit-widget="handleEdit" class="item-sub" :list="el.child"/>
+      </template>
     </div>
   </draggable>
 </template>
@@ -59,9 +61,11 @@ import widgetMenu from '../../../mobile/widget-menu';
 
 export default {
   name: 'nested-widget',
+  
   components: {
     draggable
   },
+
   props: {
     value: {
       required: false,
@@ -74,11 +78,13 @@ export default {
       default: null
     }
   },
+
   data() {
     return {
       nameMap: widgetMenu.widgetLabel
     };
   },
+
   computed: {
     ...mapState({
       editKey: state => state.editKey
@@ -97,6 +103,7 @@ export default {
       return this.value ? this.value : this.list;
     }
   },
+
   methods: {
     emitter(value) {
       this.$emit('input', value);

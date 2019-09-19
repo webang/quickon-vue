@@ -4,7 +4,9 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './store';
-import './styles/base.css';
+
+import './assets/styles/base.css';
+
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import { registerComponent } from '../mobile/registerComponent';
@@ -15,6 +17,7 @@ import '../static/UE/lang/zh-cn/zh-cn.js';
 import '../static/UE/ueditor.parse.min.js';
 
 registerComponent(Vue);
+
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 

@@ -1,0 +1,63 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  color: #333;
+  font-size: 14px;
+  overflow-x: auto;
+  background-color: #f0f3f6;
+  -webkit-font-smoothing: antialiased;
+  font-family: PingFang SC, Helvetica Neue, Arial, sans-serif;
+}
+
+body .el-input__inner {
+  border-radius: 2px;
+}
+
+.doc-edit-row {
+  margin: 20px 0;
+  .doc-edit-row-label {
+    margin-right: 20px;
+  }
+  .doc-edit-row-value {
+    width: 400px;
+  }
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+.doc-crumb {
+  margin: 20px 0;
+}
+
+.deco-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ui-full {
+  display: block;
+  width: 100%;
+}
