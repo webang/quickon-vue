@@ -18,7 +18,12 @@ export default new Router({
     {
       path: '/rich-text',
       name: 'rich-text',
-      component: () => import('../views/rich-text')
+      component: () => import('../views/article')
+    },
+    {
+      path: '/page',
+      name: 'page/:pageId',
+      component: () => import('../views/page')
     }
   ]
 });
