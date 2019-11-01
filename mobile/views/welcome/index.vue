@@ -50,12 +50,12 @@ export default {
           loadComponent(element, childList);
         });
       }
-      const cls = ['hsb-widget'];
+      const cls = ['h-widget'];
       if (item.id === this.$store.state.editKey) {
         cls.push('is-debug');
       }
       const node = createElement(
-        require(`../../hsb-components/${item.name}`).default,
+        require(`../../h-components/${item.name}`).default,
         {
           style: validStyle(item),
           props: item.props || item.prop || {},
@@ -76,7 +76,7 @@ export default {
     return createElement(
       'div',
       {
-        class: 'hsb-deco-page',
+        class: 'h-deco-page',
         attrs: {
           id: 'root',
           'data-pageId': 'demo'
@@ -89,11 +89,11 @@ export default {
 </script>
 
 <style lang="postcss" scoped>
-.hsb-deco-page {
+.h-deco-page {
   position: relative;
 }
 
-/* .hsb-widget:hover, */
+/* .h-widget:hover, */
 .is-debug {
   box-sizing: border-box;
   cursor: all-scroll;

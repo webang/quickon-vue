@@ -1,14 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import Login from '../views/login';
 import Welcome from '../views/welcome';
 import PageList from '../views/page-list';
-import EditPageV2 from '../views/edit-page-v2';
-import Login from '../views/login';
-import RichTextList from '../views/rich-text-list';
-import ckeditor from '../views/ckeditor';
-import neditor from '../views/neditor';
-import ue from '../views/ue';
+import PageEditProps from '../views/page-edit-props';
+import ArticleList from '../views/article-list';
+import ArticleEdit from '../views/article-edit';
 
 Vue.use(Router);
 
@@ -27,7 +25,7 @@ export default new Router({
     {
       name: 'EditPageV2',
       path: '/EditPageV2',
-      component: EditPageV2
+      component: PageEditProps
     },
     {
       name: 'PageList',
@@ -37,22 +35,12 @@ export default new Router({
     {
       name: 'RichTextList',
       path: '/RichTextList',
-      component: RichTextList
-    },
-    {
-      name: 'ckeditor',
-      path: '/ckeditor',
-      component: ckeditor
-    },
-    {
-      name: 'neditor',
-      path: '/neditor',
-      component: neditor
+      component: ArticleList
     },
     {
       name: 'ue',
       path: '/ue',
-      component: ue
+      component: ArticleEdit
     }
   ]
 });

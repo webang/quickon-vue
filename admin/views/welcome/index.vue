@@ -1,6 +1,6 @@
 <template>
   <div class="deco-container">
-    <main-header />
+    <MainHeader />
     <div class="container">
       <h3 class="title">页面快速上线工具</h3>
       <img class="ui-full bg" src="../../assets/img/WechatIMG62.jpeg" alt="">

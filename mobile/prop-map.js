@@ -12,27 +12,27 @@ const couponUrl = 'https://s1.huishoubao.com/web/hsbh5/static/img/8.4c8ea3b.png'
 
 export default {
   // 图片
-  'hsb-image': {
+  'h-image': {
     url: imgs[0],
     link: productUrl
   },
   // 链接
-  'hsb-link': {
+  'h-link': {
     text: '立即估价',
     link: productUrl
   },
   // 按钮
-  'hsb-button': {
+  'h-button': {
     text: '立即估价',
     url: productUrl
   },
   // 优惠券
-  'hsb-coupon': {
+  'h-coupon': {
     url: couponUrl,
     id: '0'
   },
   // 优惠券组
-  'hsb-coupon-list': {
+  'h-coupon-list': {
     couponList: [
       {
         id: 1,
@@ -53,20 +53,20 @@ export default {
     ]
   },
   // 容器
-  'hsb-container': {},
+  'h-container': {},
   // 点击热区
-  'hsb-click-area': {
+  'h-click-area': {
     url: '',
     link: productUrl
   },
-  'hsb-column': {
+  'h-column': {
     column: 2
   },
-  'hsb-counter': {},
-  'hsb-banner': {},
-  'hsb-form': {},
-  'hsb-divider': {},
-  'hsb-text': {
+  'h-counter': {},
+  'h-banner': {},
+  'h-form': {},
+  'h-divider': {},
+  'h-text': {
     text: '文本内容'
   }
 };

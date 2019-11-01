@@ -5,33 +5,25 @@
       <!-- 页面导航 -->
       <el-breadcrumb class="doc-crumb" separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>页面列表</el-breadcrumb-item>
+        <el-breadcrumb-item>富文本列表</el-breadcrumb-item>
       </el-breadcrumb>
 
-      <!-- 页面列表 -->
+      <!-- 列表 -->
       <el-table class="view__main" :data="tableData" style="width: 100%" v-loading="loading">
-        <el-table-column prop="id" label="页面索引" width="200" />
-        <el-table-column prop="name" label="页面名称" width="200" />
-        <el-table-column prop="desc" label="页面描述" />
-        <el-table-column prop="title" label="页面标题" width="200" />
-        <el-table-column prop="status" label="页面状态" width="200" />
-        <el-table-column label="页面状态" width="300">
+        <el-table-column prop="id" label="索引" width="200" />
+        <el-table-column prop="name" label="名称" width="200" />
+        <el-table-column prop="desc" label="描述" width="200" />
+        <el-table-column label="动作" width="300">
           <template slot-scope="scope">
-            <el-button size="small" plain type="primary" @click="handleShow(scope.row)">线上预览</el-button>
-            <el-button size="small" plain type="primary" @click="handleEditPageMeta(scope.row)">修改标题</el-button>
-            <el-button
-              size="small"
-              plain
-              type="primary"
-              @click="handleEditPageWidget(scope.row)"
-            >编辑组件</el-button>
+            <el-button size="small" plain type="primary" @click="handleShow(scope.row)">预览</el-button>
+            <el-button size="small" plain type="primary" @click="handleEdit(scope.row)">修改</el-button>
           </template>
         </el-table-column>
       </el-table>
 
       <!-- 底部按钮 -->
       <div class="table-footer">
-        <el-button type="primary" plain @click="addPageDialogVisible=true">新建页面</el-button>
+        <el-button type="primary" plain @click="handleAdd">新增富文本</el-button>
         <el-pagination
           style="float:right"
           background
@@ -43,20 +35,14 @@
         />
       </div>
     </div>
-
-    <!-- 新增页面弹窗 -->
-    <add-page-dialog v-model="addPageDialogVisible" @add-success="handleAddSuccess" />
-    <edit-page-meta
-      v-model="editPageMetaVisible"
-      :form-data="pageMeta"
-      @confirm="handleEditMetaSuccess"
-    />
   </div>
 </template>
 
 <script>
+/**
+ * @documention 页面列表
+ */
 import store from 'store';
-import { MessageBox } from 'element-ui';
 import apis from '../../apis';
 import MainHeader from '../../components/main-header';
 import AddPageDialog from '../../components/add-page-dialog';
@@ -84,14 +70,14 @@ export default {
     // 分页索引
     handleCurrentChange(val) {
       this.pageIndex = val;
-      this.doGetPageList();
+      this.doGetDataList();
     },
 
     // 页面列表
-    doGetPageList() {
+    doGetDataList() {
       this.loading = true;
       apis
-        .getPageList({
+        .getArticleList({
           pageIndex: this.pageIndex - 1,
           pageSize: this.pageSize
         })
@@ -121,49 +107,30 @@ export default {
         });
     },
 
-    // 添加页面成功
+    // 添加成功
     handleAddSuccess() {
-      this.doGetPageList();
+      this.doGetDataList();
+    },
+
+    // 编辑
+    handleEdit(data) {
+      store.set('editRichText', data);
+      this.$router.push(`/ue?id=${data.id}&name=${data.name}`);
     },
 
     // 预览
     handleShow({ id }) {
-      const url = `${window.location.origin}/mobile.html?pageId=${id}`;
+      const url = `${window.location.origin}/mobile.html#/article?id=${id}`;
       window.open(url);
     },
 
-    // 编辑页面组件
-    handleEditPageWidget(data) {
-      const cache = store.get('editProps');
-      const goNext = () => {
-        data.widget = JSON.parse(data.widget);
-        this.$store.commit('setEditKey', '');
-        this.$store.commit('setCacheData', data);
-        this.$router.push(`/EditPageV2?pageId=${data.id}&name=${data.name}`);
-      }
-      if (!cache) {
-        return goNext();
-      }
-      MessageBox.confirm('当前有未完成的编辑，您还要继续吗？', '系统提示').then(res => {
-        goNext();
-      }).catch(_ => {
-        goNext();
-      })
-    },
-
-    // 编辑页面标题
-    handleEditPageMeta(data) {
-      this.pageMeta = data;
-      this.editPageMetaVisible = true;
-    },
-
-    // 编辑页面标题成功
-    handleEditMetaSuccess() {
-      this.doGetPageList();
+    handleAdd() {
+      store.remove('editRichText');
+      this.$router.push(`/ue`);
     }
   },
   mounted() {
-    this.doGetPageList();
+    this.doGetDataList();
   }
 };
 </script>

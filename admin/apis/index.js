@@ -51,20 +51,20 @@ export default {
   },
 
   // 获取富文本列表
-  getRichTextList({ pageIndex, pageSize }) {
+  getArticleList({ pageIndex, pageSize }) {
     return httpInstance.get(
-      `/admin/richText?pageIndex=${pageIndex}&pageSize=${pageSize}`
+      `/admin/article?pageIndex=${pageIndex}&pageSize=${pageSize}`
     );
   },
 
   // 获取富文本详情
-  getRichTextDetail({ id }) {
-    return httpInstance.get(`/admin/richText/${id}`);
+  getArticleDetail({ id }) {
+    return httpInstance.get(`/admin/article/${id}`);
   },
 
   // 添加富文本
-  addRichText({ name, desc, content }) {
-    return httpInstance.post(`/admin/richText`, {
+  addArticle({ name, desc, content }) {
+    return httpInstance.post(`/admin/article`, {
       name,
       desc,
       content
@@ -72,8 +72,8 @@ export default {
   },
 
   // 更新富文本
-  updateRichText({ id, name, desc, content }) {
-    return httpInstance.post(`/admin/richText/${id}`, {
+  updateArticle({ id, name, desc, content }) {
+    return httpInstance.post(`/admin/article/${id}`, {
       name,
       desc,
       content

@@ -16,13 +16,13 @@ export default new Router({
       component: () => import('../views/demo')
     },
     {
-      path: '/rich-text',
-      name: 'rich-text',
+      path: '/article',
+      name: 'article',
       component: () => import('../views/article')
     },
     {
-      path: '/page',
-      name: 'page/:pageId',
+      path: '/page/:pageId',
+      name: 'page',
       component: () => import('../views/page')
     }
   ]

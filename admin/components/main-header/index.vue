@@ -1,15 +1,21 @@
 <template>
   <div class="header">
-    <span class="title">quickon 页面装修系统</span>
+    <span class="title" @click="backHome">quickon 页面装修系统</span>
     <div class="menu">
       <router-link class="link" to="/PageList">页面管理</router-link>
-      <router-link class="link" to="/RichTextList">富文本管理</router-link>
+      <router-link class="link" to="/RichTextList">文章管理</router-link>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    backHome () {
+      this.$router.push('/')
+    }
+  }
+};
 </script>
 
 <style lang="postcss" scoped>
@@ -31,6 +37,7 @@ export default {};
 
 .title {
   font-size: 16px;
+  cursor: pointer;
 }
 
 .menu {

@@ -4,32 +4,32 @@ const menu = [
     child: [
       {
         label: '文本组件',
-        name: 'hsb-text',
+        name: 'h-text',
         icon: 'el-icon-edit-outline'
       },
       {
         label: '链接组件',
-        name: 'hsb-link',
+        name: 'h-link',
         icon: 'el-icon-view'
       },
       {
         label: '图片组件',
-        name: 'hsb-image',
+        name: 'h-image',
         icon: 'el-icon-picture'
       },
       {
         label: '点击热区',
-        name: 'hsb-click-area',
+        name: 'h-click-area',
         icon: 'el-icon-star-off'
       },
       {
         label: '布局容器',
-        name: 'hsb-container',
+        name: 'h-container',
         icon: 'el-icon-news'
       },
       {
         label: '智能多列',
-        name: 'hsb-column',
+        name: 'h-column',
         icon: 'el-icon-menu'
       }
     ]
@@ -39,17 +39,17 @@ const menu = [
     child: [
       {
         label: '优惠券',
-        name: 'hsb-coupon',
+        name: 'h-coupon',
         icon: 'el-icon-picture'
       },
       {
         label: '优惠券组',
-        name: 'hsb-coupon-list',
+        name: 'h-coupon-list',
         icon: 'el-icon-edit-outline'
       },
       {
         label: '表单组件',
-        name: 'hsb-form',
+        name: 'h-form',
         icon: 'el-icon-message'
       }
     ]
@@ -59,12 +59,12 @@ const menu = [
     child: [
       {
         label: '图片轮播',
-        name: 'hsb-banner',
+        name: 'h-banner',
         icon: 'el-icon-edit-outline'
       },
       {
         label: '倒计时',
-        name: 'hsb-counter',
+        name: 'h-counter',
         icon: 'el-icon-time'
       }
     ]
