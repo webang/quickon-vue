@@ -1,7 +1,9 @@
 <template>
   <div class="body" v-if="showEditWidget">
+    {{ curForm }}
+
     <!-- 编辑图片 -->
-    <template v-if="curForm.name==='hsb-image'">
+    <template v-if="curForm.name==='h-image'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='url'">
           <div style="overflow: hidden">
@@ -18,7 +20,7 @@
     </template>
 
     <!-- 编辑链接 -->
-    <template v-if="curForm.name==='hsb-link'">
+    <template v-if="curForm.name==='h-link'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='url'">
           <div style="overflow: hidden">
@@ -39,7 +41,7 @@
     </template>
 
     <!-- 编辑热区 -->
-    <template v-if="curForm.name==='hsb-click-area'">
+    <template v-if="curForm.name==='h-click-area'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='link'">
           <span class="row-label">跳转链接</span>
@@ -56,7 +58,7 @@
     </template>
 
     <!-- 编辑优惠券 -->
-    <template v-if="curForm.name==='hsb-coupon'">
+    <template v-if="curForm.name==='h-coupon'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='id'">
           <span class="row-label">券ID</span>
@@ -73,7 +75,7 @@
     </template>
 
     <!-- 优惠券组 -->
-    <template v-if="curForm.name==='hsb-coupon-list'">
+    <template v-if="curForm.name==='h-coupon-list'">
       <div
         class="row coupon-list-prop"
         v-for="(key, index) in Object.keys(curForm.props)"
@@ -100,7 +102,7 @@
     </template>
 
     <!-- 多列 -->
-    <template v-if="curForm.name==='hsb-column'">
+    <template v-if="curForm.name==='h-column'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='column'">
           <span class="row-label">设置列数</span>
@@ -110,7 +112,7 @@
     </template>
 
     <!-- 文本 -->
-    <template v-if="curForm.name==='hsb-text'">
+    <template v-if="curForm.name==='h-text'">
       <div class="row" v-for="(key, index) in Object.keys(curForm.props)" :key="index">
         <template v-if="key==='text'">
           <span class="row-label">文本內容</span>
