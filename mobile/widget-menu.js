@@ -34,41 +34,41 @@ const menu = [
       }
     ]
   },
-  {
-    title: '业务组件',
-    child: [
-      {
-        label: '优惠券',
-        name: 'h-coupon',
-        icon: 'el-icon-picture'
-      },
-      {
-        label: '优惠券组',
-        name: 'h-coupon-list',
-        icon: 'el-icon-edit-outline'
-      },
-      {
-        label: '表单组件',
-        name: 'h-form',
-        icon: 'el-icon-message'
-      }
-    ]
-  },
-  {
-    title: '交互组件',
-    child: [
-      {
-        label: '图片轮播',
-        name: 'h-banner',
-        icon: 'el-icon-edit-outline'
-      },
-      {
-        label: '倒计时',
-        name: 'h-counter',
-        icon: 'el-icon-time'
-      }
-    ]
-  }
+  // {
+  //   title: '业务组件',
+  //   child: [
+  //     {
+  //       label: '优惠券',
+  //       name: 'h-coupon',
+  //       icon: 'el-icon-picture'
+  //     },
+  //     {
+  //       label: '优惠券组',
+  //       name: 'h-coupon-list',
+  //       icon: 'el-icon-edit-outline'
+  //     },
+  //     {
+  //       label: '表单组件',
+  //       name: 'h-form',
+  //       icon: 'el-icon-message'
+  //     }
+  //   ]
+  // },
+  // {
+  //   title: '交互组件',
+  //   child: [
+  //     {
+  //       label: '图片轮播',
+  //       name: 'h-banner',
+  //       icon: 'el-icon-edit-outline'
+  //     },
+  //     {
+  //       label: '倒计时',
+  //       name: 'h-counter',
+  //       icon: 'el-icon-time'
+  //     }
+  //   ]
+  // }
 ];
 
 const widgetLabel = {};

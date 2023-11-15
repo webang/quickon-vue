@@ -1,5 +1,8 @@
 <script>
 import { mapState } from 'vuex';
+import WidgetWrapper from '../../tool-components/widget-wrapper';
+import WidgetShadow from '../../tool-components/widget-shadow';
+
 export default {
   computed: {
     ...mapState({
@@ -66,7 +69,9 @@ export default {
         },
         childList
       );
-      nodeList.push(node);
+      const shadow = createElement(WidgetShadow);
+      const wrapper = createElement(WidgetWrapper, [node, shadow]);
+      nodeList.push(wrapper);
     };
 
     widget.forEach(element => {
@@ -93,7 +98,6 @@ export default {
   position: relative;
 }
 
-/* .h-widget:hover, */
 .is-debug {
   box-sizing: border-box;
   cursor: all-scroll;
