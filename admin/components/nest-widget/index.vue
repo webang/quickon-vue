@@ -4,6 +4,8 @@
   .btn {
     float: right;
     margin-left: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
   }
 }
 

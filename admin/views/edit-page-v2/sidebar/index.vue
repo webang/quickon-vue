@@ -17,6 +17,7 @@
       </div>
     </div>
     <el-button class="btn-add" :disabled="!activeIndex" @click="handleAdd" plain type="primary">添加组件</el-button>
+    <slot></slot>
   </div>
 </template>
 
@@ -57,11 +58,11 @@ export default {
   position: fixed;
   left: 0;
   top: 60px;
-  width: 240px;
+  width: 300px;
   height: 100%;
   border-right: 1px solid #e8e8e8;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
   padding-bottom: 20px;
   box-sizing: border-box;
   overflow-y: auto;
@@ -71,7 +72,9 @@ export default {
   }
   &__menu-item {
     float: left;
-    width: 50%;
+    margin-right: 6px;
+    width: calc(50% - 6px);
+    margin-bottom: 6px;
     text-align: center;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -87,7 +90,7 @@ export default {
     overflow: hidden;
   }
   &__menu-item-icon {
-    font-size: 30px;
+    font-size: 24px;
     color: #409eff;
   }
   &__menu-item-text {
@@ -96,6 +99,6 @@ export default {
 }
 
 .btn-add {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 </style>

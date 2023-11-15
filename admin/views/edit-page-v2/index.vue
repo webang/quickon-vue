@@ -13,21 +13,26 @@
         <li @click="doCheck">预览</li>
         <li @click="handleSave">发布</li>
       </ul>
+      <div style="position: absolute; left: 320px; right: 420px; display: flex; justify-content: center;">
+        <div style="margin: 0 auto;">
+          <img @click="deviceMode = 'pc'" src="./icon/pc.svg" alt="">
+          <img @click="deviceMode = 'h5'"  src="./icon/h5.svg" alt="">
+          <img @click="deviceMode = 'full'" src="./icon/full.svg" alt="">
+        </div>
+      </div>
     </div>
 
     <!-- 侧边栏 -->
-    <sidebar @add-widget="handleConfirmAddWidget" />
+    <sidebar @add-widget="handleConfirmAddWidget">
+      <div style="margin-top: 10px;">
+        <div style="line-height: 40px;">图层</div>
+        <nest-widget v-model="pageData.widget" />
+      </div>
+    </sidebar>
 
     <div class="container">
-      <!-- 模拟器 -->
-      <!-- <simulator></simulator> -->
-      <div class="simulator">
+      <div :class="['simulator', deviceMode + '-simulator']">
         <iframe id="simulator" :src="mobileUrl" frameborder="0" />
-      </div>
-
-      <!-- 编辑区域 -->
-      <div class="drag-wrapper">
-        <nest-widget v-model="pageData.widget" />
       </div>
     </div>
 
@@ -43,9 +48,6 @@
 </template>
 
 <script>
-/**
- * @documention 编辑页面组件
- */
 import EditWidgetArea from '../../components/edit-widget-props';
 import NestWidget from '../../components/nest-widget';
 import RawDisplay from '../../components/raw-display';
@@ -53,7 +55,6 @@ import Utils from '../../utils';
 import apis from '../../apis';
 import { mapState } from 'vuex';
 import store from 'store';
-import MainHeader from '../../components/main-header';
 import Sidebar from './sidebar';
 import Simulator from './simulator';
 
@@ -67,6 +68,7 @@ export default {
   },
   data() {
     return {
+      deviceMode: 'h5',
       mobileUrl: '',
       pageData: {
         widget: []
@@ -245,11 +247,11 @@ export default {
   overflow-y: scroll;
   position: fixed;
   display: flex;
-  left: 260px;
+  left: 320px;
   top: 80px;
-  right: 700px;
+  right: 420px;
   bottom: 0;
-  background-color: #f2f3f4;
+  background-color: #eef2f6;
 }
 
 .toolbar {
@@ -257,17 +259,29 @@ export default {
   position: fixed;
   right: 0;
   top: 60px;
-  width: 680px;
+  width: 400px;
   height: 100%;
   background: #fff;
 }
 
 .simulator {
+  margin: 0 auto;
+  box-shadow: 0 0 0 1px #3f3f440d, 0 1px 3px #3f3f4426;
+  position: relative;
+  background: #fff;
+}
+
+.pc-simulator {
+  width: 100%;
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.h5-simulator {
   width: 375px;
   height: 667px;
-  margin: 0 auto;
-  background: #fff;
-  border: 1px solid #333;
   iframe {
     width: 100%;
     height: 100%;
