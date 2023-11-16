@@ -1,5 +1,7 @@
 <script>
 import { mapState } from 'vuex';
+import WidgetWrapper from '../../edit-components/widget-wrapper.vue';
+import WidgetInspector from '../../edit-components/widget-inspector.vue'
 export default {
   computed: {
     ...mapState({
@@ -16,6 +18,14 @@ export default {
   },
   created() {
     this.$store.dispatch('getPageData');
+  },
+  mounted () {
+    const sections = document.querySelectorAll(".hsb-widget");
+    sections.forEach((it) => {
+      it.addEventListener('mouseover', () => {
+
+      })
+    })
   },
   render(createElement) {
     const widget = JSON.parse(JSON.stringify(this.widget));
@@ -54,6 +64,7 @@ export default {
       if (item.id === this.$store.state.editKey) {
         cls.push('is-debug');
       }
+
       const node = createElement(
         require(`../../hsb-components/${item.name}`).default,
         {
@@ -66,12 +77,22 @@ export default {
         },
         childList
       );
+
+
       nodeList.push(node);
     };
 
     widget.forEach(element => {
       loadComponent(element, vNodeList);
     });
+
+    const wrapper = createElement(WidgetInspector, {
+        // attrs: {
+        //     'data-widget': item.id
+        //   }
+      }, []);
+
+    vNodeList.push(wrapper)
 
     return createElement(
       'div',
@@ -93,7 +114,6 @@ export default {
   position: relative;
 }
 
-/* .hsb-widget:hover, */
 .is-debug {
   box-sizing: border-box;
   cursor: all-scroll;
