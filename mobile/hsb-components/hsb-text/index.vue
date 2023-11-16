@@ -1,5 +1,9 @@
 <template>
-  <p class="hsb-text" v-html="text"></p>
+  <div>
+    <p class="hsb-text" v-html="text"></p>
+    <input type="text" placeholder="1123">
+    <a href="">baidu</a>
+  </div>
 </template>
 
 <script>

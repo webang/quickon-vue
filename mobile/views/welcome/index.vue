@@ -61,9 +61,9 @@ export default {
         });
       }
       const cls = ['hsb-widget'];
-      if (item.id === this.$store.state.editKey) {
-        cls.push('is-debug');
-      }
+      // if (item.id === this.$store.state.editKey) {
+      //   cls.push('is-debug');
+      // }
 
       const node = createElement(
         require(`../../hsb-components/${item.name}`).default,
